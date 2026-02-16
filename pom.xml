@@ -6,7 +6,7 @@
   <artifactId>kakasi2</artifactId>
   <packaging>jar</packaging>
   <version>1.0.0</version>
-  <name>kakasi2</name>
+  <name>libkakasi2</name>
   <organization>
     <name>Villseriol</name>
     <url>https://github.com/villseriol</url>
@@ -37,18 +37,33 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>debian-maven-plugin</artifactId>
-        <version>1.7</version>
-        <configuration>
-          <packageName>libkakasi2-java</packageName>
-          <maintainer>Villseriol &lt;villseriol@pm.me&gt;</maintainer>
-          <description></description>
-          <depends>
-            <depend>default-jre</depend>
-            <depend>libkakasi2</depend>
-          </depends>
-        </configuration>
+        <groupId>org.vafer</groupId>
+        <artifactId>jdeb</artifactId>
+        <version>1.14</version>
+        <executions>
+          <execution>
+            <id>make-deb</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jdeb</goal>
+            </goals>
+            <configuration>
+              <verbose>true</verbose>
+              <snapshotEnv>USER</snapshotEnv>
+              <controlDir>${basedir}/src/deb/control</controlDir>
+              <dataSet>
+                <data>
+                  <src>${project.build.directory}/${project.build.finalName}.jar</src>
+                  <type>file</type>
+                  <mapper>
+                    <type>perm</type>
+                    <prefix>/usr/share/java</prefix>
+                  </mapper>
+                </data>
+              </dataSet>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
