@@ -13,12 +13,8 @@ public class kakasi {
     return kakasiJNI.kakasi_getopt_argv(argc);
   }
 
+
   public static String kakasi_do(byte[] str) {
     return kakasiJNI.kakasi_do(str);
   }
-
-  public static int kakasi_close_kanwadict() {
-    return kakasiJNI.kakasi_close_kanwadict();
-  }
-
 }

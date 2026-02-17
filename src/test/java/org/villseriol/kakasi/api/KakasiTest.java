@@ -55,6 +55,7 @@ public class KakasiTest {
 
         assertEquals("a^kanso^ shuu", Kakasi.run("アーカンソー州"));
         assertEquals("Fullwidth & kanji", Kakasi.run("Ｆｕｌｌｗｉｄｔｈ ＆ 漢字"));
+        assertEquals("anan ichiritsu aba kubou . minzoku shiryoukan", Kakasi.run("髙座公民館"));
         assertEquals("anan ichiritsu aba kubou . minzoku shiryoukan", Kakasi.run("阿南市立阿波公方・民俗資料館"));
     }
 }

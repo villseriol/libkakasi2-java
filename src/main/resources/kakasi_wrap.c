@@ -218,7 +218,7 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 extern "C" {
 #endif
 
-SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJNI_kakasi_1getopt_1argv(JNIEnv *jenv, jclass jcls, jobjectArray jarg1) {
+SWIGEXPORT jint JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1getopt_1argv(JNIEnv *jenv, jclass jcls, jobjectArray jarg1) {
   jint jresult = 0 ;
   int arg1 ;
   char **arg2 = (char **) 0 ;
@@ -259,7 +259,7 @@ SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJ
 }
 
 
-SWIGEXPORT jstring JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJNI_kakasi_1do(JNIEnv *jenv, jclass jcls, jbyteArray jarg1) {
+SWIGEXPORT jstring JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1do(JNIEnv *jenv, jclass jcls, jbyteArray jarg1) {
   jstring jresult = 0 ;
   char *arg1 = (char *) 0 ;
   char *result = 0 ;
@@ -275,18 +275,6 @@ SWIGEXPORT jstring JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kaka
     (*jenv)->ReleaseByteArrayElements(jenv, jarg1, (jbyte *) arg1, 0); 
   }
   
-  return jresult;
-}
-
-
-SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJNI_kakasi_1close_1kanwadict(JNIEnv *jenv, jclass jcls) {
-  jint jresult = 0 ;
-  int result;
-  
-  (void)jenv;
-  (void)jcls;
-  result = (int)kakasi_close_kanwadict();
-  jresult = (jint)result; 
   return jresult;
 }
 

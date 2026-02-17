@@ -11,5 +11,4 @@ package org.villseriol.kakasi.jni;
 public class kakasiJNI {
   public final static native int kakasi_getopt_argv(String[] jarg1);
   public final static native String kakasi_do(byte[] jarg1);
-  public final static native int kakasi_close_kanwadict();
 }
