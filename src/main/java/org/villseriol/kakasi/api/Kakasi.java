@@ -15,7 +15,8 @@ public final class Kakasi {
     private static final Charset EUC_JP = Charset.forName("EUC-JP");
 
     static {
-        NativeLoader.load();
+        NativeLoader.loadLibrary();
+        NativeLoader.loadDataFiles();
     }
 
     private Kakasi() {

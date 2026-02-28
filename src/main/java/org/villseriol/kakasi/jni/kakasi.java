@@ -17,4 +17,12 @@ public class kakasi {
     return kakasiJNI.kakasi_do(str);
   }
 
+  public static void set_kanwadict(String path) {
+    kakasiJNI.set_kanwadict(path);
+  }
+
+  public static void set_itaijidict(String path) {
+    kakasiJNI.set_itaijidict(path);
+  }
+
 }

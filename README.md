@@ -4,7 +4,7 @@
 
 ### Building Kakasi From Source
 ```sh
-CFLAGS="-fPIC" ./configure --disable-shared --enable-static
+CFLAGS="-fPIC" ./configure --disable-shared --enable-static --prefix=.
 
 make clean
 make

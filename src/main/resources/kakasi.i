@@ -51,3 +51,13 @@
 /* Parse the header file to generate wrappers */
 int kakasi_getopt_argv(int argc, char **argv);
 char *kakasi_do(char *str);
+
+%inline %{
+void set_kanwadict(char *path) {
+    setenv("KANWADICT", path, 1); 
+}
+
+void set_itaijidict(char *path) {
+    setenv("ITAIJIDICT", path, 1); 
+}
+%}

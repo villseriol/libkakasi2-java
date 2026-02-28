@@ -214,6 +214,15 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
     #include <string.h>
 
 
+void set_kanwadict(char *path) {
+    setenv("KANWADICT", path, 1); 
+}
+
+void set_itaijidict(char *path) {
+    setenv("ITAIJIDICT", path, 1); 
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -276,6 +285,36 @@ SWIGEXPORT jstring JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1do(J
   }
   
   return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_set_1kanwadict(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+  char *arg1 = (char *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = 0;
+  if (jarg1) {
+    arg1 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg1, 0);
+    if (!arg1) return ;
+  }
+  set_kanwadict(arg1);
+  if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
+}
+
+
+SWIGEXPORT void JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_set_1itaijidict(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+  char *arg1 = (char *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = 0;
+  if (jarg1) {
+    arg1 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg1, 0);
+    if (!arg1) return ;
+  }
+  set_itaijidict(arg1);
+  if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
 }
 
 
