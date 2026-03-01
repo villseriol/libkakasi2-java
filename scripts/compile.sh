@@ -2,7 +2,7 @@
 set -e
 
 JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-KAKASI_STATIC_LIB=~/dev/kakasi-2.3.6/lib/.libs/libkakasi.a
+KAKASI_STATIC_LIB=/tmp/kakasi-linux/lib/libkakasi.a
 
 GIT_DIR=$(git rev-parse --show-toplevel)
 

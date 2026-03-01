@@ -5,6 +5,18 @@
     #include "libkakasi.h"
     #include <stdlib.h>
     #include <string.h>
+
+    #ifdef _WIN32
+    // Windows version
+    static void portable_setenv(const char *name, const char *value) {
+        _putenv_s(name, value);   // overwrites existing value
+    }
+    #else
+    // POSIX version
+    static void portable_setenv(const char *name, const char *value) {
+        setenv(name, value, 1);   // 1 = overwrite
+    }
+    #endif
 %}
 
 %include "various.i"
@@ -53,11 +65,11 @@ int kakasi_getopt_argv(int argc, char **argv);
 char *kakasi_do(char *str);
 
 %inline %{
-void set_kanwadict(char *path) {
-    setenv("KANWADICT", path, 1); 
+void set_kanwadict(const char *path) {
+    portable_setenv("KANWADICT", path);
 }
 
-void set_itaijidict(char *path) {
-    setenv("ITAIJIDICT", path, 1); 
+void set_itaijidict(const char *path) {
+    portable_setenv("ITAIJIDICT", path);
 }
 %}

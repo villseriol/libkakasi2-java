@@ -213,13 +213,25 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
     #include <stdlib.h>
     #include <string.h>
 
+    #ifdef _WIN32
+    // Windows version
+    static void portable_setenv(const char *name, const char *value) {
+        _putenv_s(name, value);   // overwrites existing value
+    }
+    #else
+    // POSIX version
+    static void portable_setenv(const char *name, const char *value) {
+        setenv(name, value, 1);   // 1 = overwrite
+    }
+    #endif
 
-void set_kanwadict(char *path) {
-    setenv("KANWADICT", path, 1); 
+
+void set_kanwadict(const char *path) {
+    portable_setenv("KANWADICT", path);
 }
 
-void set_itaijidict(char *path) {
-    setenv("ITAIJIDICT", path, 1); 
+void set_itaijidict(const char *path) {
+    portable_setenv("ITAIJIDICT", path);
 }
 
 
@@ -298,7 +310,7 @@ SWIGEXPORT void JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_set_1kanwadict(
     arg1 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg1, 0);
     if (!arg1) return ;
   }
-  set_kanwadict(arg1);
+  set_kanwadict((char const *)arg1);
   if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
 }
 
@@ -313,7 +325,7 @@ SWIGEXPORT void JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_set_1itaijidict
     arg1 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg1, 0);
     if (!arg1) return ;
   }
-  set_itaijidict(arg1);
+  set_itaijidict((char const *)arg1);
   if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
 }
 
