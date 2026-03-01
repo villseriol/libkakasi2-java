@@ -68,16 +68,38 @@ public final class NativeLoader {
             return; // load only once
         }
 
-        String libName = "libkakasi_jni.so"; // JNI library compiled for Linux
+        if (isLibraryLoaded) {
+            return; // load only once
+        }
 
-        try (InputStream in = NativeLoader.class.getResourceAsStream("/native/linux/" + libName)) {
+        String os = System.getProperty("os.name").toLowerCase();
+        String libFileName;
+        String resourcePath;
+        String tempSuffix;
+
+        if (os.contains("win")) {
+            libFileName = "libkakasi_jni.dll";
+            resourcePath = "/native/windows/" + libFileName;
+            tempSuffix = ".dll";
+        } else if (os.contains("linux")) {
+            libFileName = "libkakasi_jni.so";
+            resourcePath = "/native/linux/" + libFileName;
+            tempSuffix = ".so";
+        } else {
+            throw new UnsupportedOperationException("Unsupported OS: " + os);
+        }
+
+        try (InputStream in = NativeLoader.class.getResourceAsStream(resourcePath)) {
             if (in == null) {
-                throw new RuntimeException("Native library not found in resources: " + libName);
+                throw new RuntimeException("Native library not found in resources: " + resourcePath);
             }
 
-            Path temp = Files.createTempFile("libkakasi_jni", ".so");
+            Path temp = Files.createTempFile("kakasi_jni", tempSuffix);
+            temp.toFile().deleteOnExit();
+
             Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
             System.load(temp.toAbsolutePath().toString());
+
             isLibraryLoaded = true;
         } catch (IOException e) {
             throw new RuntimeException("Failed to load native library", e);
