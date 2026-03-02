@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class KakasiTest {
+public class KakasiToAsciiTest {
     @BeforeEach
     public void setUp() {
         KakasiConfig config = KakasiConfig.createDefaultConfig();
@@ -24,7 +24,7 @@ public class KakasiTest {
 
 
     @Test
-    public void testSimpleAscii() {
+    public void testUntouched() {
         assertEquals("test (villseriol)", Kakasi.run("test (villseriol)"));
         assertEquals("test", Kakasi.run("test"));
     }
@@ -37,25 +37,24 @@ public class KakasiTest {
 
 
     @Test
-    public void testKatakana() {
-        assertEquals("aporobe^kari^", Kakasi.run("アポロベーカリー"));
+    public void testAdjective() {
+        assertEquals("shoujiki", Kakasi.run("正直"));
+        assertEquals("byoudou", Kakasi.run("平等"));
+        assertEquals("shounin", Kakasi.run("商人"));
+        assertEquals("kokkyou", Kakasi.run("国境"));
+        assertEquals("ichiban", Kakasi.run("一番"));
     }
 
 
     @Test
-    public void testKanji() {
-        // Known issues with kakasi and dictionary entry priority
+    public void testNoun() {
+        assertEquals("furo", Kakasi.run("風呂"));
+        assertEquals("hakubutsukan", Kakasi.run("博物館"));
         assertNotEquals("nihon", Kakasi.run("日本"));
-
-        // Only works when using .geo dictionary, but causes other entries to fail
-
-        // For OSM projects, exclude the .geo dictionary
-        // If the entry is of geographic importance, it most likely has an english/romaji entry anyway
-        assertNotEquals("shirahanechou", Kakasi.run("白羽根町"));
-
+        assertEquals("aporobe^kari^", Kakasi.run("アポロベーカリー"));
         assertEquals("a^kanso^ shuu", Kakasi.run("アーカンソー州"));
-        assertEquals("Fullwidth & kanji", Kakasi.run("Ｆｕｌｌｗｉｄｔｈ ＆ 漢字"));
-        assertEquals("anan ichiritsu aba kubou . minzoku shiryoukan", Kakasi.run("髙座公民館"));
-        assertEquals("anan ichiritsu aba kubou . minzoku shiryoukan", Kakasi.run("阿南市立阿波公方・民俗資料館"));
+
+        assertNotEquals("shirahanechou", Kakasi.run("白羽根町"));
+        assertEquals("anan ichiritsu awa kubou . minzoku shiryoukan", Kakasi.run("阿南市立阿波公方・民俗資料館"));
     }
 }

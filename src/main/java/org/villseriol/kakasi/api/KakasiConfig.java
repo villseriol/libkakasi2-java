@@ -8,7 +8,8 @@ import java.util.List;
 
 
 public class KakasiConfig {
-    // Do not change the input and output encoding configuration, this java wrapper abstracts from this concept
+    // Do not change the input and output encoding configuration, this library abstracts from this
+    // The embedded kakasi library was not compiled to support input utf-8
     private static final KakasiInOutEncoding INPUT_ENCODING = KakasiInOutEncoding.EUC;
     private static final KakasiInOutEncoding OUTPUT_ENCODING = KakasiInOutEncoding.UTF8;
 
