@@ -5,7 +5,7 @@
   <groupId>org.villseriol</groupId>
   <artifactId>kakasi2</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1</version>
+  <version>1.0.0</version>
   <name>libkakasi2</name>
   <organization>
     <name>Villseriol</name>
@@ -32,6 +32,12 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <distributionManagement>
+    <repository>
+      <id>central</id>
+      <url>https://central.sonatype.com/api/v1/publisher</url>
+    </repository>
+  </distributionManagement>
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
