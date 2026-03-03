@@ -1,6 +1,21 @@
 # libkakasi2-java
 
 ## Getting Started
+```java
+KakasiConfig config = KakasiConfig.createDefaultConfig();
+Kakasi.configure(config);
+String out = Kakasi.run("正直");
+```
+
+## Maintainers Guide
+
+### Prerequisites
+```sh
+sudo apt get install \
+    build-essential \
+    x86_64-w64-mingw32-gcc \
+    openjdk-11-jdk
+```
 
 ### Building Kakasi From Source
 To maintain the status of this library as a wrapper, I decided that I would make no modifications to the source code to get things working.
@@ -11,16 +26,15 @@ There were a few issues that I had to overcome during the build process:
 3. `kakasi` embeds `KANWADICT` and `ITAIJIDICT` paths at compile-time, meaning I had to get clever about setting this at runtime.
 
 #### Windows
-Download the dependencies required to build the library.
-
 ```sh
-sudo apt get install \
-    build-essential \
-    x86_64-w64-mingw32-gcc
-```
+# 1) Download the archive
+wget http://kakasi.namazu.org/stable/kakasi-2.3.6.tar.xz
 
-Build the static library for Windows.
-```sh
+# 2) Extract the archive
+tar -xvf kakasi-2.3.6.tar.xz
+
+# 2) Configure + make
+cd kakasi-2.3.6
 ./configure \
     CFLAGS="-fPIC" \
     --host=x86_64-w64-mingw32 \
@@ -34,17 +48,20 @@ make install
 ```
 
 #### Linux
-Download the dependencies required to build the library.
 ```sh
-sudo apt get install build-essential
-```
+# 1) Download the archive
+wget http://kakasi.namazu.org/stable/kakasi-2.3.6.tar.xz
 
-Build the static library for Linux.
-```sh
+# 2) Extract the archive
+tar -xvf kakasi-2.3.6.tar.xz
+
+# 2) Configure + make
+cd kakasi-2.3.6
 ./configure \
     CFLAGS="-fPIC" \
     --disable-shared \
     --enable-static \
+    --disable-utf8 \
     --prefix=/tmp/kakasi-linux/
 
 make
@@ -52,10 +69,16 @@ make install
 ```
 
 ### Compiling SWIG
-
+```sh
+./scripts/swig.sh
+```
 
 ### Compiling Embedded Library
-
+```sh
+./scripts/compile-windows.sh
+# or
+./scripts/compile.sh
+```
 
 ## License
 Under normal circumstances, I would have preferred using the shared-library implementation of `kakasi` to decouple the underlying library from my wrapper. The reasons for using the static library were:
