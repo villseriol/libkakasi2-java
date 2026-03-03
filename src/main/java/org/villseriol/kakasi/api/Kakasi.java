@@ -32,8 +32,7 @@ public final class Kakasi {
     public static void configure(final KakasiConfig config) {
         String[] argv = config.getArguments();
 
-        LOGGER.debug("Configuring libkakasi2");
-        LOGGER.debug(String.join(" ", argv));
+        LOGGER.debug("Configuring libkakasi2 (" + String.join(" ", argv) + ")");
 
         int success = kakasi.kakasi_getopt_argv(argv);
         if (success != 0) {
