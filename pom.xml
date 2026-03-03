@@ -2,7 +2,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.villseriol</groupId>
+  <groupId>io.github.villseriol</groupId>
   <artifactId>kakasi2</artifactId>
   <packaging>jar</packaging>
   <version>1.0.0</version>
@@ -11,6 +11,7 @@
     <name>Villseriol</name>
     <url>https://github.com/villseriol</url>
   </organization>
+  <description>A Java wrapper around the Kakasi C library.</description>
   <developers>
     <developer>
       <id>EY4180</id>
@@ -69,7 +70,7 @@
   <build>
     <plugins>
       <!-- Debian Publishing JAR -->
-      <plugin>
+      <!-- <plugin>
         <groupId>org.vafer</groupId>
         <artifactId>jdeb</artifactId>
         <version>1.14</version>
@@ -97,7 +98,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -163,6 +164,10 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <keyname>${gpg.keyname}</keyname>
+          <passphrase>${gpg.passphrase}</passphrase>
+        </configuration>
       </plugin>
 
       <!-- Central Publishing Plugin -->
