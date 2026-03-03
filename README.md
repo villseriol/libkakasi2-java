@@ -1,6 +1,6 @@
 # libkakasi2-java
 
-## Getting Started
+## Usage
 ```java
 KakasiConfig config = KakasiConfig.createDefaultConfig();
 Kakasi.configure(config);

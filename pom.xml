@@ -11,6 +11,13 @@
     <name>Villseriol</name>
     <url>https://github.com/villseriol</url>
   </organization>
+  <developers>
+    <developer>
+      <id>ey4180</id>
+      <name>EY4180</name>
+      <email>ey4180@pm.me</email>
+    </developer>
+  </developers>
   <inceptionYear>2026</inceptionYear>
   <url>https://github.com/villseriol/libkakasi2-java</url>
   <scm>
