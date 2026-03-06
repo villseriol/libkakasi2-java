@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 public class KakasiPunctuationTest extends AbstractTest {
     @BeforeAll
     public static void onlyOnce() {
-        KakasiConfig config = KakasiConfig.createDefaultConfig();
+        KakasiConfig config = createAllToAsciiConfig();
 
         Kakasi.configure(config);
     }

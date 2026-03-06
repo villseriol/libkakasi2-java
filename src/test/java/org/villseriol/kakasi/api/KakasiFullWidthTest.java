@@ -7,10 +7,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
-public class KakasiFullWidthTest {
+public class KakasiFullWidthTest extends AbstractTest {
     @BeforeAll
     public static void onlyOnce() {
-        KakasiConfig config = KakasiConfig.createDefaultConfig();
+        KakasiConfig config = createAllToAsciiConfig();
         Kakasi.configure(config);
     }
 
