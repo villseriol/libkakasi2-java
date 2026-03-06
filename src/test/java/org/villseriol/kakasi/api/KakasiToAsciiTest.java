@@ -1,25 +1,19 @@
-// This software is released into the Public Domain. See copying.txt for details.
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.villseriol.kakasi.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
 public class KakasiToAsciiTest {
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    public static void onlyOnce() {
         KakasiConfig config = KakasiConfig.createDefaultConfig();
+
         Kakasi.configure(config);
-    }
-
-
-    @AfterEach
-    public void tareDown() {
-        // Do nothing
     }
 
 
