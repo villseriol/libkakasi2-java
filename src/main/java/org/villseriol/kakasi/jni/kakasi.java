@@ -9,20 +9,29 @@
 package org.villseriol.kakasi.jni;
 
 public class kakasi {
-  public static int kakasi_getopt_argv(String[] argc) {
-    return kakasiJNI.kakasi_getopt_argv(argc);
-  }
-
-  public static String kakasi_do(byte[] str) {
-    return kakasiJNI.kakasi_do(str);
-  }
-
   public static void set_kanwadict(String path) {
     kakasiJNI.set_kanwadict(path);
   }
 
   public static void set_itaijidict(String path) {
     kakasiJNI.set_itaijidict(path);
+  }
+
+  public static SWIGTYPE_p_void load_library(String lib) {
+    long cPtr = kakasiJNI.load_library(lib);
+    return (cPtr == 0) ? null : new SWIGTYPE_p_void(cPtr, false);
+  }
+
+  public static int kakasi_getopt_argv(SWIGTYPE_p_void handle, String[] argc) {
+    return kakasiJNI.kakasi_getopt_argv(SWIGTYPE_p_void.getCPtr(handle), argc);
+  }
+
+  public static String kakasi_do(SWIGTYPE_p_void handle, byte[] str) {
+    return kakasiJNI.kakasi_do(SWIGTYPE_p_void.getCPtr(handle), str);
+  }
+
+  public static int kakasi_close(SWIGTYPE_p_void handle) {
+    return kakasiJNI.kakasi_close(SWIGTYPE_p_void.getCPtr(handle));
   }
 
 }

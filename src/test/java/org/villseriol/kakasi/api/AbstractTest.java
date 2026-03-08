@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 
 public abstract class AbstractTest {
-    public static final KakasiConfig createAllToAsciiConfig() {
+    public final KakasiConfig createAllToAsciiConfig() {
         return new KakasiConfig() {
             {
                 setSeparatorEnabled(true);
@@ -21,5 +21,15 @@ public abstract class AbstractTest {
                 });
             }
         };
+    }
+
+
+    public final String getLargeDictionary() {
+        return getClass().getClassLoader().getResource("SKK-JISYO.L").getPath();
+    }
+
+
+    public final String getGeoDictionary() {
+        return getClass().getClassLoader().getResource("SKK-JISYO.geo").getPath();
     }
 }

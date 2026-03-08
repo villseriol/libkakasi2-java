@@ -11,7 +11,7 @@ import org.villseriol.kakasi.jni.kakasi;
 
 
 public final class NativeLoader {
-    private static boolean isLibraryLoaded = false;
+    private static boolean isLoaderLoaded = false;
     private static boolean isDataLoaded = false;
 
     private NativeLoader() {
@@ -63,12 +63,43 @@ public final class NativeLoader {
     }
 
 
-    public static void loadLibrary() {
-        if (isLibraryLoaded) {
-            return; // load only once
+    public static String loadKakasiLibrary() {
+        String os = System.getProperty("os.name").toLowerCase();
+        String libFileName;
+        String resourcePath;
+        String tempSuffix;
+
+        if (os.contains("win")) {
+            libFileName = "libkakasi.dll";
+            resourcePath = "/native/windows/" + libFileName;
+            tempSuffix = ".dll";
+        } else if (os.contains("linux")) {
+            libFileName = "libkakasi.so";
+            resourcePath = "/native/linux/" + libFileName;
+            tempSuffix = ".so";
+        } else {
+            throw new UnsupportedOperationException("Unsupported OS: " + os);
         }
 
-        if (isLibraryLoaded) {
+        try (InputStream in = NativeLoader.class.getResourceAsStream(resourcePath)) {
+            if (in == null) {
+                throw new RuntimeException("Native library not found in resources: " + resourcePath);
+            }
+
+            Path temp = Files.createTempFile("kakasi", tempSuffix);
+            temp.toFile().deleteOnExit();
+
+            Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
+
+            return temp.toAbsolutePath().toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load native library", e);
+        }
+    }
+
+
+    public static void loadLoaderLibrary() {
+        if (isLoaderLoaded) {
             return; // load only once
         }
 
@@ -100,7 +131,7 @@ public final class NativeLoader {
             Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
             System.load(temp.toAbsolutePath().toString());
 
-            isLibraryLoaded = true;
+            isLoaderLoaded = true;
         } catch (IOException e) {
             throw new RuntimeException("Failed to load native library", e);
         }

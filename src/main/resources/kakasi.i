@@ -2,19 +2,49 @@
 %module kakasi
 %{
     /* Includes the header in the wrapper code */
-    #include "libkakasi.h"
+    // #include "libkakasi.h"
     #include <stdlib.h>
     #include <string.h>
+    #ifdef _WIN32
+      #include <windows.h>
+    #else
+      #include <dlfcn.h>
+    #endif
+
+    typedef int (*kakasi_getopt_argv_t)(int argc, char **argv);
+    typedef char* (*kakasi_do_t)(char *str);
 
     #ifdef _WIN32
     // Windows version
     static void portable_setenv(const char *name, const char *value) {
         _putenv_s(name, value);   // overwrites existing value
     }
+
+    static void *portable_load_library(const char *path) {
+
+    }
     #else
     // POSIX version
     static void portable_setenv(const char *name, const char *value) {
         setenv(name, value, 1);   // 1 = overwrite
+    }
+
+    static void *portable_load_library(const char *path) {
+        return dlopen(path, RTLD_NOW);
+    }
+
+    static int portable_kakasi_getopt_argv(void *handle, int argc, char **argv) {
+        kakasi_getopt_argv_t f = (kakasi_getopt_argv_t) dlsym(handle, "kakasi_getopt_argv");
+        return f(argc, argv);
+    }
+
+    static char *portable_kakasi_do(void *handle, char *str) {
+        kakasi_do_t f = (kakasi_do_t) dlsym(handle, "kakasi_do");
+        return f(str);
+    }
+
+    static int portable_kakasi_close(void *handle) {
+        return dlclose(handle);
     }
     #endif
 %}
@@ -61,9 +91,6 @@
 }
 
 /* Parse the header file to generate wrappers */
-int kakasi_getopt_argv(int argc, char **argv);
-char *kakasi_do(char *str);
-
 %inline %{
 void set_kanwadict(const char *path) {
     portable_setenv("KANWADICT", path);
@@ -71,5 +98,21 @@ void set_kanwadict(const char *path) {
 
 void set_itaijidict(const char *path) {
     portable_setenv("ITAIJIDICT", path);
+}
+
+void *load_library(const char *lib) {
+    return portable_load_library(lib);
+}
+
+int kakasi_getopt_argv(void *handle, int argc, char **argv) {
+    return portable_kakasi_getopt_argv(handle, argc, argv);
+}
+
+char *kakasi_do(void *handle, char *str) {
+    return portable_kakasi_do(handle, str);
+}
+
+int kakasi_close(void *handle) {
+    return portable_kakasi_close(handle);
 }
 %}

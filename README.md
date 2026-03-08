@@ -59,8 +59,8 @@ tar -xvf kakasi-2.3.6.tar.xz
 cd kakasi-2.3.6
 ./configure \
     CFLAGS="-fPIC" \
-    --disable-shared \
-    --enable-static \
+    --enable-shared \
+    --disable-static \
     --disable-utf8 \
     --prefix=/tmp/kakasi-linux/
 

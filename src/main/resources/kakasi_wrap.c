@@ -209,19 +209,49 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 
 
     /* Includes the header in the wrapper code */
-    #include "libkakasi.h"
+    // #include "libkakasi.h"
     #include <stdlib.h>
     #include <string.h>
+    #ifdef _WIN32
+      #include <windows.h>
+    #else
+      #include <dlfcn.h>
+    #endif
+
+    typedef int (*kakasi_getopt_argv_t)(int argc, char **argv);
+    typedef char* (*kakasi_do_t)(char *str);
 
     #ifdef _WIN32
     // Windows version
     static void portable_setenv(const char *name, const char *value) {
         _putenv_s(name, value);   // overwrites existing value
     }
+
+    static void *portable_load_library(const char *path) {
+
+    }
     #else
     // POSIX version
     static void portable_setenv(const char *name, const char *value) {
         setenv(name, value, 1);   // 1 = overwrite
+    }
+
+    static void *portable_load_library(const char *path) {
+        return dlopen(path, RTLD_NOW);
+    }
+
+    static int portable_kakasi_getopt_argv(void *handle, int argc, char **argv) {
+        kakasi_getopt_argv_t f = (kakasi_getopt_argv_t) dlsym(handle, "kakasi_getopt_argv");
+        return f(argc, argv);
+    }
+
+    static char *portable_kakasi_do(void *handle, char *str) {
+        kakasi_do_t f = (kakasi_do_t) dlsym(handle, "kakasi_do");
+        return f(str);
+    }
+
+    static int portable_kakasi_close(void *handle) {
+        return dlclose(handle);
     }
     #endif
 
@@ -234,71 +264,26 @@ void set_itaijidict(const char *path) {
     portable_setenv("ITAIJIDICT", path);
 }
 
+void *load_library(const char *lib) {
+    return portable_load_library(lib);
+}
+
+int kakasi_getopt_argv(void *handle, int argc, char **argv) {
+    return portable_kakasi_getopt_argv(handle, argc, argv);
+}
+
+char *kakasi_do(void *handle, char *str) {
+    return portable_kakasi_do(handle, str);
+}
+
+int kakasi_close(void *handle) {
+    return portable_kakasi_close(handle);
+}
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-SWIGEXPORT jint JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1getopt_1argv(JNIEnv *jenv, jclass jcls, jobjectArray jarg1) {
-  jint jresult = 0 ;
-  int arg1 ;
-  char **arg2 = (char **) 0 ;
-  int result;
-  
-  (void)jenv;
-  (void)jcls;
-  {
-    int i, len;
-    if (jarg1 == (jobjectArray)0) {
-      SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null array");
-      return 0;
-    }
-    len = (int)(*jenv)->GetArrayLength(jenv, jarg1);
-    if (len < 0) {
-      SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, "array length negative");
-      return 0;
-    }
-    arg2 = (char **) malloc((len+1)*sizeof(char *));
-    if (arg2 == NULL) {
-      SWIG_JavaThrowException(jenv, SWIG_JavaOutOfMemoryError, "memory allocation failed");
-      return 0;
-    }
-    arg1 = len;
-    for (i = 0; i < len; i++) {
-      jstring j_string = (jstring)(*jenv)->GetObjectArrayElement(jenv, jarg1, (jsize)i);
-      const char *c_string = (*jenv)->GetStringUTFChars(jenv, j_string, 0);
-      arg2[i] = (char *)c_string;
-    }
-    arg2[i] = NULL;
-  }
-  result = (int)kakasi_getopt_argv(arg1,arg2);
-  jresult = (jint)result; 
-  {
-    free((void *)arg2);
-  }
-  return jresult;
-}
-
-
-SWIGEXPORT jstring JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1do(JNIEnv *jenv, jclass jcls, jbyteArray jarg1) {
-  jstring jresult = 0 ;
-  char *arg1 = (char *) 0 ;
-  char *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  {
-    arg1 = (char *) (*jenv)->GetByteArrayElements(jenv, jarg1, 0); 
-  }
-  result = (char *)kakasi_do(arg1);
-  if (result) jresult = (*jenv)->NewStringUTF(jenv, (const char *)result);
-  {
-    (*jenv)->ReleaseByteArrayElements(jenv, jarg1, (jbyte *) arg1, 0); 
-  }
-  
-  return jresult;
-}
-
 
 SWIGEXPORT void JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_set_1kanwadict(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   char *arg1 = (char *) 0 ;
@@ -327,6 +312,104 @@ SWIGEXPORT void JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_set_1itaijidict
   }
   set_itaijidict((char const *)arg1);
   if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_load_1library(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+  jlong jresult = 0 ;
+  char *arg1 = (char *) 0 ;
+  void *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = 0;
+  if (jarg1) {
+    arg1 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg1, 0);
+    if (!arg1) return 0;
+  }
+  result = (void *)load_library((char const *)arg1);
+  *(void **)&jresult = result; 
+  if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1getopt_1argv(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2) {
+  jint jresult = 0 ;
+  void *arg1 = (void *) 0 ;
+  int arg2 ;
+  char **arg3 = (char **) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(void **)&jarg1; 
+  {
+    int i, len;
+    if (jarg2 == (jobjectArray)0) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null array");
+      return 0;
+    }
+    len = (int)(*jenv)->GetArrayLength(jenv, jarg2);
+    if (len < 0) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, "array length negative");
+      return 0;
+    }
+    arg3 = (char **) malloc((len+1)*sizeof(char *));
+    if (arg3 == NULL) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaOutOfMemoryError, "memory allocation failed");
+      return 0;
+    }
+    arg2 = len;
+    for (i = 0; i < len; i++) {
+      jstring j_string = (jstring)(*jenv)->GetObjectArrayElement(jenv, jarg2, (jsize)i);
+      const char *c_string = (*jenv)->GetStringUTFChars(jenv, j_string, 0);
+      arg3[i] = (char *)c_string;
+    }
+    arg3[i] = NULL;
+  }
+  result = (int)kakasi_getopt_argv(arg1,arg2,arg3);
+  jresult = (jint)result; 
+  {
+    free((void *)arg3);
+  }
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1do(JNIEnv *jenv, jclass jcls, jlong jarg1, jbyteArray jarg2) {
+  jstring jresult = 0 ;
+  void *arg1 = (void *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(void **)&jarg1; 
+  {
+    arg2 = (char *) (*jenv)->GetByteArrayElements(jenv, jarg2, 0); 
+  }
+  result = (char *)kakasi_do(arg1,arg2);
+  if (result) jresult = (*jenv)->NewStringUTF(jenv, (const char *)result);
+  {
+    (*jenv)->ReleaseByteArrayElements(jenv, jarg2, (jbyte *) arg2, 0); 
+  }
+  
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1close(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  jint jresult = 0 ;
+  void *arg1 = (void *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(void **)&jarg1; 
+  result = (int)kakasi_close(arg1);
+  jresult = (jint)result; 
+  return jresult;
 }
 
 
