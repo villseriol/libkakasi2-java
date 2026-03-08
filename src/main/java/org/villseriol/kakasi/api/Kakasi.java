@@ -1,17 +1,14 @@
-// This software is released into the Public Domain. See copying.txt for details.
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.villseriol.kakasi.api;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.villseriol.kakasi.internal.NativeLoader;
 import org.villseriol.kakasi.jni.kakasi;
 
 
 public final class Kakasi {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Kakasi.class);
     private static final Charset EUC_JP = Charset.forName("EUC-JP");
 
     static {
@@ -28,16 +25,14 @@ public final class Kakasi {
      * Configure that kakasi shared library globally using the specified config.
      *
      * @param config the config
+     * @return true if successful, false otherwise
      */
-    public static void configure(final KakasiConfig config) {
+    public static boolean configure(final KakasiConfig config) {
         String[] argv = config.getArguments();
 
-        LOGGER.debug("Configuring libkakasi2 (" + String.join(" ", argv) + ")");
-
         int success = kakasi.kakasi_getopt_argv(argv);
-        if (success != 0) {
-            LOGGER.warn("Failed during configuration of libkakasi2");
-        }
+
+        return success == 0;
     }
 
 
