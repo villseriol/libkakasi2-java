@@ -19,6 +19,10 @@
     <!-- See http://checkstyle.sf.net/config_sizes.html -->
     <module name="FileLength" />
 
+    <module name="SuppressionFilter">
+        <property name="file" value="checkstyle-suppressions.xml" />
+    </module>
+
     <!-- Enabled to ensure that the correct copyright header is inserted. -->
     <module name="Header">
         <property

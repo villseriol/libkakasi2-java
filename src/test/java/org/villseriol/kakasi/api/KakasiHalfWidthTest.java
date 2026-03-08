@@ -3,13 +3,13 @@ package org.villseriol.kakasi.api;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 public class KakasiHalfWidthTest extends AbstractTest {
-    @BeforeAll
-    public static void onlyOnce() {
+    @BeforeEach
+    public void setUp() {
         KakasiConfig config = createAllToAsciiConfig();
 
         Kakasi.configure(config);

@@ -4,13 +4,13 @@ package org.villseriol.kakasi.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 public class KakasiPunctuationTest extends AbstractTest {
-    @BeforeAll
-    public static void onlyOnce() {
+    @BeforeEach
+    public void setUp() {
         KakasiConfig config = createAllToAsciiConfig();
 
         Kakasi.configure(config);
@@ -36,6 +36,7 @@ public class KakasiPunctuationTest extends AbstractTest {
         assertEquals("\"", Kakasi.run("″"), "Double prime '″' should become '\"'");
         assertEquals("\"", Kakasi.run("゛"), "Voiced sound mark '゛' should become '\"'");
         assertEquals("\"", Kakasi.run("ﾞ"), "Half-width voiced mark 'ﾞ' should become '\"'");
+        assertEquals("(maru)", Kakasi.run("ﾟ"), "Half-width voiced mark 'ﾟ' should become '(maru)'");
         assertNotEquals("'", Kakasi.run("ʻ"), "Modifier letter apostrophe 'ʻ' should become '\''");
 
         // Dash
