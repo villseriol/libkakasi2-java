@@ -16,12 +16,31 @@
 
     #ifdef _WIN32
     // Windows version
-    static void portable_setenv(const char *name, const char *value) {
-        _putenv_s(name, value);   // overwrites existing value
+    static void portable_setenv(const char *name, const char *value)
+    {
+        _putenv_s(name, value); // overwrites existing value
     }
 
-    static void *portable_load_library(const char *path) {
+    static void *portable_load_library(const char *path)
+    {
+        return LoadLibrary(path);
+    }
 
+    static int portable_kakasi_getopt_argv(void *handle, int argc, char **argv)
+    {
+        kakasi_getopt_argv_t f = (kakasi_getopt_argv_t)GetProcAddress(handle, "kakasi_getopt_argv");
+        return f(argc, argv);
+    }
+
+    static char *portable_kakasi_do(void *handle, char *str)
+    {
+        kakasi_do_t f = (kakasi_do_t)GetProcAddress(handle, "kakasi_do");
+        return f(str);
+    }
+
+    static int portable_kakasi_close(void *handle)
+    {
+        return FreeLibrary(handle);
     }
     #else
     // POSIX version
