@@ -27,19 +27,20 @@ public abstract class AbstractTest {
     }
 
 
-    public final String getLargeDictionary() throws URISyntaxException {
-        URL url = getClass().getResource("/SKK-JISYO.L");
-        File file = new File(url.toURI()); // converts to proper platform path
-        String path = file.getAbsolutePath();
+    private String loadTestResource(String path) throws URISyntaxException {
+        URL url = getClass().getResource(path);
+        File file = new File(url.toURI());
 
-        return path;
+        return file.getAbsolutePath();
     }
 
-    public final String getGeoDictionary() throws URISyntaxException {
-        URL url = getClass().getResource("/SKK-JISYO.geo");
-        File file = new File(url.toURI()); // converts to proper platform path
-        String path = file.getAbsolutePath();
 
-        return path;
+    public final String getLargeDictionary() throws URISyntaxException {
+        return loadTestResource("/SKK-JISYO.L");
+    }
+
+
+    public final String getGeoDictionary() throws URISyntaxException {
+        return loadTestResource("/SKK-JISYO.geo");
     }
 }

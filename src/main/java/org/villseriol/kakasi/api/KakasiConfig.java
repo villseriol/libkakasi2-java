@@ -3,7 +3,6 @@ package org.villseriol.kakasi.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 
@@ -19,24 +18,6 @@ public class KakasiConfig {
     private boolean capitalize;
     private boolean upperCase;
     private String separator;
-
-    public static KakasiConfig createDefaultConfig() {
-        return new KakasiConfig() {
-            {
-                setSeparatorEnabled(true);
-                setTranslations(new HashSet<>() {
-                    {
-                        add(new KakasiTranslation(KakasiCharsetCategory.HIRAGANA, KakasiCharsetCategory.ASCII));
-                        add(new KakasiTranslation(KakasiCharsetCategory.KANJI, KakasiCharsetCategory.ASCII));
-                        add(new KakasiTranslation(KakasiCharsetCategory.KATAKANA_JIS, KakasiCharsetCategory.ASCII));
-                        add(new KakasiTranslation(KakasiCharsetCategory.SIGN, KakasiCharsetCategory.ASCII));
-                        add(new KakasiTranslation(KakasiCharsetCategory.KATAKANA, KakasiCharsetCategory.ASCII));
-                    }
-                });
-            }
-        };
-    }
-
 
     public void setUpperCase(boolean upperCase) {
         this.upperCase = upperCase;
