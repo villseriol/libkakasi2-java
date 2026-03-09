@@ -1,6 +1,9 @@
 // This software is released into the Public Domain.  See copying.txt for details.
 package org.villseriol.kakasi.api;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashSet;
 
 
@@ -24,12 +27,19 @@ public abstract class AbstractTest {
     }
 
 
-    public final String getLargeDictionary() {
-        return getClass().getClassLoader().getResource("SKK-JISYO.L").getPath();
+    public final String getLargeDictionary() throws URISyntaxException {
+        URL url = getClass().getResource("/SKK-JISYO.L");
+        File file = new File(url.toURI()); // converts to proper platform path
+        String path = file.getAbsolutePath();
+
+        return path;
     }
 
+    public final String getGeoDictionary() throws URISyntaxException {
+        URL url = getClass().getResource("/SKK-JISYO.geo");
+        File file = new File(url.toURI()); // converts to proper platform path
+        String path = file.getAbsolutePath();
 
-    public final String getGeoDictionary() {
-        return getClass().getClassLoader().getResource("SKK-JISYO.geo").getPath();
+        return path;
     }
 }

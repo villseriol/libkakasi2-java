@@ -1,6 +1,7 @@
 // This software is released into the Public Domain.  See copying.txt for details.
 package org.villseriol.kakasi.api;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -53,9 +54,10 @@ public class KakasiMultipleConfigurationTest extends AbstractTest {
 
         KakasiConfig config = createAllToAsciiConfig();
         config.setSeparatorEnabled(true);
-
-        String geo = getGeoDictionary();
-        config.setDictionaries(List.of(geo));
+        assertDoesNotThrow(() -> {
+            String geo = getGeoDictionary();
+            config.setDictionaries(List.of(geo));
+        });
 
         result.configure(config);
 
