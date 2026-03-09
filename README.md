@@ -38,8 +38,7 @@ cd kakasi-2.3.6
 ./configure \
     CFLAGS="-fPIC" \
     --host=x86_64-w64-mingw32 \
-    --disable-shared \
-    --enable-static \
+    --enable-shared \
     --disable-utf8 \
     --prefix=/tmp/kakasi-win/
 
