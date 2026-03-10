@@ -15,7 +15,8 @@ What this project provides is:
 
 ## Installation
 
-TBD (Maven)
+See the [artifact repository](https://central.sonatype.com/artifact/io.github.villseriol/kakasi2)
+for installation instructions.
 
 ## Usage
 
