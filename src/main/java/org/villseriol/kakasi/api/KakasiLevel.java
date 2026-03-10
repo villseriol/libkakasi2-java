@@ -3,8 +3,6 @@ package org.villseriol.kakasi.api;
 
 /**
  * A level enum used for configuring the hiragana and furigana.
- *
- * @author Villseriol
  */
 public enum KakasiLevel {
     /**

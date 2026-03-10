@@ -13,6 +13,10 @@ import org.villseriol.kakasi.jni.SWIGTYPE_p_void;
 import org.villseriol.kakasi.jni.kakasi;
 
 
+/**
+ * Create an instance of this class to access functions inside the kakasi C
+ * library.
+ */
 public class Kakasi implements Closeable {
     private static final Charset EUC_JP = Charset.forName("EUC-JP");
     private static final Cleaner CLEANER = Cleaner.create();
@@ -26,11 +30,19 @@ public class Kakasi implements Closeable {
         NativeLoader.bootstrapDataFiles();
     }
 
+    /**
+     * Create an instance and configure it with an empty config.
+     */
     public Kakasi() {
-        this(KakasiConstants.ASCII_CONFIG);
+        this(KakasiConstants.EMPTY_CONFIG);
     }
 
 
+    /**
+     * Create an instance and immediately configure it.
+     *
+     * @param config the config
+     */
     public Kakasi(final KakasiConfig config) {
         super();
 

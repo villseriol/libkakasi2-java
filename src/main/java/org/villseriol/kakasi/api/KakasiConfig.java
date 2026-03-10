@@ -4,22 +4,25 @@ package org.villseriol.kakasi.api;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 
 public class KakasiConfig {
-    // Do not change the input and output encoding configuration, this library abstracts from this
+    // Do not change the input and output encoding configuration, this library
+    // abstracts from this
     // The embedded kakasi library was not compiled to support input utf-8
     private static final KakasiInOutEncoding INPUT_ENCODING = KakasiInOutEncoding.EUC;
     private static final KakasiInOutEncoding OUTPUT_ENCODING = KakasiInOutEncoding.UTF8;
 
-    private Collection<KakasiTranslation> translations = new ArrayList<>();
-    private Collection<String> dictionaries = new ArrayList<>();
+    private Collection<KakasiTranslation> translations;
+    private Collection<String> dictionaries;
     private boolean wakatigaki;
     private boolean yomi;
     private boolean furigana;
     private boolean showAllReadings;
     private String separator;
     private KakasiRomaji romaji = KakasiRomaji.HEPBURN;
+    private Collection<Character> skipCharacters;
 
     public KakasiConfig() {
         super();
@@ -29,14 +32,34 @@ public class KakasiConfig {
     public KakasiConfig(KakasiConfig target) {
         super();
 
-        this.translations = new ArrayList<>(target.translations);
-        this.dictionaries = new ArrayList<>(target.dictionaries);
+        Optional.ofNullable(target.translations).ifPresent((value) -> {
+            this.translations = new ArrayList<>(value);
+        });
+
+        Optional.ofNullable(target.dictionaries).ifPresent((value) -> {
+            this.dictionaries = new ArrayList<>(value);
+        });
+
+        Optional.ofNullable(target.skipCharacters).ifPresent((value) -> {
+            this.skipCharacters = new ArrayList<>(value);
+        });
+
         this.wakatigaki = target.wakatigaki;
         this.yomi = target.yomi;
         this.furigana = target.furigana;
         this.showAllReadings = target.showAllReadings;
         this.separator = target.separator;
         this.romaji = target.romaji;
+    }
+
+
+    public Collection<Character> getSkipCharacters() {
+        return skipCharacters;
+    }
+
+
+    public void setSkipCharacters(Collection<Character> extraSkipCharacters) {
+        this.skipCharacters = extraSkipCharacters;
     }
 
 
@@ -142,8 +165,21 @@ public class KakasiConfig {
             arguments.add("-f");
         }
 
+        if (showAllReadings) {
+            arguments.add("-p");
+        }
+
         if (romaji != null) {
             arguments.add(String.format("-r%s", romaji.getCode()));
+        }
+
+        if (skipCharacters != null) {
+            StringBuilder sb = new StringBuilder();
+            for (Character c : skipCharacters) {
+                sb.append(c);
+            }
+
+            arguments.add(String.format("-c%s", sb.toString()));
         }
 
         if (translations != null) {

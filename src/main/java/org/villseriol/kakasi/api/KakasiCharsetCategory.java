@@ -2,7 +2,7 @@
 package org.villseriol.kakasi.api;
 
 /**
- * @author Villseriol
+ *
  */
 public enum KakasiCharsetCategory {
     /**
@@ -34,7 +34,8 @@ public enum KakasiCharsetCategory {
      */
     KATAKANA_JIS("K"),
     /**
-     *  JIS x0208 characters included in section 1,2,3,6,7, and 8. (Note that section 9-15 are undefined in JIS x0208.)
+     * JIS x0208 characters included in section 1,2,3,6,7, and 8. (Note that
+     * section 9-15 are undefined in JIS x0208.)
      */
     SIGN("E");
 

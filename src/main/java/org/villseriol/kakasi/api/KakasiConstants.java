@@ -11,7 +11,32 @@ public final class KakasiConstants {
     }
 
     /**
-     * A config for converting all japanese characters to ascii.
+     * No config.
+     */
+    public static final KakasiConfig EMPTY_CONFIG = new KakasiConfig();
+
+    /**
+     * Converts all japanese to ascii and shows all readings for each word.
+     */
+    public static final KakasiConfig ASCII_CONFIG_DEBUG = new KakasiConfig() {
+        {
+            setSeparator(" ");
+            setShowAllReadings(true);
+
+            setTranslations(new HashSet<>() {
+                {
+                    add(new KakasiTranslation(KakasiCharsetCategory.HIRAGANA, KakasiCharsetCategory.ASCII));
+                    add(new KakasiTranslation(KakasiCharsetCategory.KANJI, KakasiCharsetCategory.ASCII));
+                    add(new KakasiTranslation(KakasiCharsetCategory.KATAKANA_JIS, KakasiCharsetCategory.ASCII));
+                    add(new KakasiTranslation(KakasiCharsetCategory.SIGN, KakasiCharsetCategory.ASCII));
+                    add(new KakasiTranslation(KakasiCharsetCategory.KATAKANA, KakasiCharsetCategory.ASCII));
+                }
+            });
+        }
+    };
+
+    /**
+     * Converts all japanese to ascii.
      */
     public static final KakasiConfig ASCII_CONFIG = new KakasiConfig() {
         {

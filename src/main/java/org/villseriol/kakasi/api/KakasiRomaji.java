@@ -3,8 +3,6 @@ package org.villseriol.kakasi.api;
 
 /**
  * A romaji enum used for configuring the romanization method.
- *
- * @author Villseriol
  */
 public enum KakasiRomaji {
     /**
