@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.villseriol.kakasi.internal.KakasiInOutEncoding;
+
 
 public class KakasiConfig {
     // Do not change the input and output encoding configuration, this library

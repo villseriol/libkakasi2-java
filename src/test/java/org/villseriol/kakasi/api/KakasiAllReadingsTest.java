@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class KakasiAllYomiTest {
+public class KakasiAllReadingsTest {
     private Kakasi kakasi = new Kakasi();
 
     @BeforeEach
@@ -26,6 +26,7 @@ public class KakasiAllYomiTest {
         assertEquals("mokuteki", kakasi.run("目的"));
         assertEquals("mokuji", kakasi.run("目次"));
         assertEquals("mokuhyou", kakasi.run("目標"));
+        assertEquals("majime", kakasi.run("真面目"));
 
         // Second word is garbage, normal operation will prioritize the first
         assertEquals("{mezawari|mezahari}", kakasi.run("目障り"));
