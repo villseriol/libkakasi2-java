@@ -33,6 +33,7 @@ There were a few issues that I had to overcome during the build process:
 1. `iconv` was not working in the `.dll` build, meaning I had to turn off utf8 processing
 2. I tried using `msys2` to build natively on Windows, but cross compiling ended up being simpler
 3. `kakasi` embeds `KANWADICT` and `ITAIJIDICT` paths at compile-time, meaning I had to get clever about setting this at runtime.
+4. The static implementation meant that it was impossible to guarantee what configuration kakasi would have at runtime. This is because configuring kakasi more than once would override previous configurations. I updated everything to be instance-based by adding a wrapper around system-specific loaders that allow scoped library loading.
 
 #### Windows
 ```sh
