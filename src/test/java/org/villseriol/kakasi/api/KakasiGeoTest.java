@@ -18,7 +18,7 @@ public class KakasiGeoTest extends AbstractTest {
         KakasiConfig config = new KakasiConfig(KakasiConstants.ASCII_CONFIG);
 
         assertDoesNotThrow(() -> {
-            String geo = getGeoDictionary();
+            String geo = getGeoDictionaryPath();
             config.setDictionaries(List.of(geo));
         });
 

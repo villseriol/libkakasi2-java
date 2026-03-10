@@ -27,6 +27,11 @@ public class Kakasi implements Closeable {
     }
 
     public Kakasi() {
+        this(KakasiConstants.ASCII_CONFIG);
+    }
+
+
+    public Kakasi(final KakasiConfig config) {
         super();
 
         File libraryFile = NativeLoader.loadNewKakasiLibrary();
@@ -35,11 +40,6 @@ public class Kakasi implements Closeable {
         this.state = new KakasiState(libraryHandle, libraryFile);
 
         this.cleanable = CLEANER.register(this, this.state);
-    }
-
-
-    public Kakasi(final KakasiConfig config) {
-        this();
 
         this.configure(config);
     }
