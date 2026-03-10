@@ -2,11 +2,10 @@
 package org.villseriol.kakasi.api;
 
 import java.io.Closeable;
-import java.io.IOException;
+import java.io.File;
 import java.lang.ref.Cleaner;
 import java.lang.ref.Cleaner.Cleanable;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import org.villseriol.kakasi.internal.KakasiState;
 import org.villseriol.kakasi.internal.NativeLoader;
@@ -23,19 +22,26 @@ public class Kakasi implements Closeable {
     private final KakasiState state;
 
     static {
-        NativeLoader.loadLoaderLibrary();
-        NativeLoader.loadDataFiles();
+        NativeLoader.bootstrapLoaderLibrary();
+        NativeLoader.bootstrapDataFiles();
     }
 
     public Kakasi() {
         super();
 
-        String libraryPath = NativeLoader.loadKakasiLibrary();
-        SWIGTYPE_p_void libraryHandle = kakasi.load_library(libraryPath);
+        File libraryFile = NativeLoader.loadNewKakasiLibrary();
+        SWIGTYPE_p_void libraryHandle = kakasi.load_library(libraryFile.getAbsolutePath());
 
-        this.state = new KakasiState(libraryHandle);
+        this.state = new KakasiState(libraryHandle, libraryFile);
 
         this.cleanable = CLEANER.register(this, this.state);
+    }
+
+
+    public Kakasi(final KakasiConfig config) {
+        this();
+
+        this.configure(config);
     }
 
 
@@ -46,6 +52,10 @@ public class Kakasi implements Closeable {
      * @return true if successful, false otherwise
      */
     public boolean configure(final KakasiConfig config) {
+        if (state.isClosed()) {
+            throw new KakasiRuntimeException("Kakasi instance has already been closed.");
+        }
+
         String[] argv = config.getArguments();
 
         SWIGTYPE_p_void handle = this.state.getHandle();
@@ -63,6 +73,10 @@ public class Kakasi implements Closeable {
      * @return the converted string
      */
     public String run(final String input) {
+        if (state.isClosed()) {
+            throw new KakasiRuntimeException("Kakasi instance has already been closed.");
+        }
+
         StringBuilder sb = new StringBuilder(input);
         boolean isNullTerminated = input.endsWith("\0");
         if (!isNullTerminated) {
@@ -88,19 +102,8 @@ public class Kakasi implements Closeable {
     }
 
 
-    /**
-     * Encode the provided string into a byte array using the UTF-8 encoding.
-     *
-     * @param input the string
-     * @return the byte array
-     */
-    private static byte[] encodeToUtf8(String input) {
-        return input.getBytes(StandardCharsets.UTF_8);
-    }
-
-
     @Override
-    public void close() throws IOException {
+    public void close() {
         cleanable.clean();
     }
 }

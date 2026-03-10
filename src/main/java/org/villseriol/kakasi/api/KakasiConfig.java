@@ -14,28 +14,79 @@ public class KakasiConfig {
 
     private Collection<KakasiTranslation> translations = new ArrayList<>();
     private Collection<String> dictionaries = new ArrayList<>();
-    private boolean separatorEnabled;
-    private boolean capitalize;
-    private boolean upperCase;
+    private boolean wakatigaki;
+    private boolean yomi;
+    private boolean furigana;
+    private boolean showAllReadings;
     private String separator;
+    private KakasiRomaji romaji = KakasiRomaji.HEPBURN;
 
-    public void setUpperCase(boolean upperCase) {
-        this.upperCase = upperCase;
+    public KakasiConfig() {
+        super();
     }
 
 
-    public boolean isUpperCase() {
-        return upperCase;
+    public KakasiConfig(KakasiConfig target) {
+        super();
+
+        this.translations = new ArrayList<>(target.translations);
+        this.dictionaries = new ArrayList<>(target.dictionaries);
+        this.wakatigaki = target.wakatigaki;
+        this.yomi = target.yomi;
+        this.furigana = target.furigana;
+        this.showAllReadings = target.showAllReadings;
+        this.separator = target.separator;
+        this.romaji = target.romaji;
     }
 
 
-    public void setCapitalize(boolean capitalize) {
-        this.capitalize = capitalize;
+    public void setShowAllReadings(boolean showAllReadings) {
+        this.showAllReadings = showAllReadings;
     }
 
 
-    public boolean isCapitalize() {
-        return capitalize;
+    public boolean isShowAllReadings() {
+        return showAllReadings;
+    }
+
+
+    public void setFurigana(boolean furigana) {
+        this.furigana = furigana;
+    }
+
+
+    public boolean isFurigana() {
+        return furigana;
+    }
+
+
+    public void setYomi(boolean yomi) {
+        this.yomi = yomi;
+    }
+
+
+    public boolean isYomi() {
+        return yomi;
+    }
+
+
+    public KakasiRomaji getRomaji() {
+        return romaji;
+    }
+
+
+    public void setRomaji(KakasiRomaji romaji) {
+        this.romaji = romaji;
+    }
+
+
+    public void setWakatigaki(boolean wakatigaki) {
+        this.wakatigaki = wakatigaki;
+    }
+
+
+    public boolean isWakatigaki() {
+        return wakatigaki;
     }
 
 
@@ -46,16 +97,6 @@ public class KakasiConfig {
 
     public void setDictionaries(Collection<String> dictionaries) {
         this.dictionaries = dictionaries;
-    }
-
-
-    public boolean isSeparatorEnabled() {
-        return separatorEnabled;
-    }
-
-
-    public void setSeparatorEnabled(boolean separatorEnabled) {
-        this.separatorEnabled = separatorEnabled;
     }
 
 
@@ -84,28 +125,37 @@ public class KakasiConfig {
         arguments.add(String.format("-i%s", INPUT_ENCODING.getCode()));
         arguments.add(String.format("-o%s", OUTPUT_ENCODING.getCode()));
 
-        if (separatorEnabled) {
+        if (separator != null && !"".equals(separator)) {
             arguments.add("-s");
+            arguments.add(String.format("-S%s", separator));
+        }
 
-            if (separator != null && !"".equals(separator)) {
-                arguments.add(String.format("-S\"%s\"", separator));
+        if (yomi) {
+            arguments.add("-y");
+        }
+
+        if (wakatigaki) {
+            arguments.add("-w");
+        }
+
+        if (furigana) {
+            arguments.add("-f");
+        }
+
+        if (romaji != null) {
+            arguments.add(String.format("-r%s", romaji.getCode()));
+        }
+
+        if (translations != null) {
+            for (KakasiTranslation t : translations) {
+                arguments.add(String.format("-%s%s", t.getFrom().getCode(), t.getTo().getCode()));
             }
         }
 
-        if (upperCase) {
-            arguments.add("U");
-        }
-
-        if (capitalize) {
-            arguments.add("-C");
-        }
-
-        for (KakasiTranslation t : translations) {
-            arguments.add(String.format("-%s%s", t.getFrom().getCode(), t.getTo().getCode()));
-        }
-
-        for (String d : dictionaries) {
-            arguments.add(d);
+        if (dictionaries != null) {
+            for (String d : dictionaries) {
+                arguments.add(d);
+            }
         }
 
         return arguments.toArray(String[]::new);

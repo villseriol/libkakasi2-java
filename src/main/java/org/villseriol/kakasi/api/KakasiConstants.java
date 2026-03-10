@@ -11,12 +11,11 @@ public final class KakasiConstants {
     }
 
     /**
-     * Hello World.
+     * A config for converting all japanese characters to ascii.
      */
     public static final KakasiConfig ASCII_CONFIG = new KakasiConfig() {
         {
-            setUpperCase(true);
-            setSeparatorEnabled(true);
+            setSeparator(" ");
 
             setTranslations(new HashSet<>() {
                 {
@@ -28,5 +27,5 @@ public final class KakasiConstants {
                 }
             });
         }
-    };
+    };;
 }

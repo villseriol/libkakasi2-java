@@ -15,14 +15,12 @@ public class KakasiGeoTest extends AbstractTest {
 
     @BeforeEach
     public void setUp() {
-        KakasiConfig config = createAllToAsciiConfig();
+        KakasiConfig config = new KakasiConfig(KakasiConstants.ASCII_CONFIG);
 
         assertDoesNotThrow(() -> {
             String geo = getGeoDictionary();
             config.setDictionaries(List.of(geo));
         });
-
-        config.setSeparatorEnabled(true);
 
         kakasi.configure(config);
 

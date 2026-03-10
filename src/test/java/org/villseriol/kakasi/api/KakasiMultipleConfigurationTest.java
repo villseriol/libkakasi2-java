@@ -30,12 +30,7 @@ public class KakasiMultipleConfigurationTest extends AbstractTest {
      * @return the instance
      */
     private Kakasi createWithNoDictionary() {
-        Kakasi result = new Kakasi();
-
-        KakasiConfig config = createAllToAsciiConfig();
-        config.setSeparatorEnabled(true);
-
-        result.configure(config);
+        Kakasi result = new Kakasi(KakasiConstants.ASCII_CONFIG);
 
         String first = result.run("にほんご");
         assertEquals(first, "nihongo");
@@ -52,8 +47,7 @@ public class KakasiMultipleConfigurationTest extends AbstractTest {
     private Kakasi createWithGeoDictionary() {
         Kakasi result = new Kakasi();
 
-        KakasiConfig config = createAllToAsciiConfig();
-        config.setSeparatorEnabled(true);
+        KakasiConfig config = new KakasiConfig(KakasiConstants.ASCII_CONFIG);
         assertDoesNotThrow(() -> {
             String geo = getGeoDictionary();
             config.setDictionaries(List.of(geo));

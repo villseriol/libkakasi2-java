@@ -12,9 +12,7 @@ public class KakasiHalfWidthTest extends AbstractTest {
 
     @BeforeEach
     public void setUp() {
-        KakasiConfig config = createAllToAsciiConfig();
-
-        kakasi.configure(config);
+        kakasi.configure(KakasiConstants.ASCII_CONFIG);
     }
 
 
