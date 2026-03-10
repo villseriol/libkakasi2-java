@@ -1,10 +1,19 @@
 # libkakasi2-java
 
 ## Usage
+Using instance method.
 ```java
-KakasiConfig config = KakasiConfig.createDefaultConfig();
-Kakasi.configure(config);
-String out = Kakasi.run("正直");
+Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG);
+String out = kakasi.run("正直"); // shoujiki
+```
+Using try-resources method.
+
+```java
+try (Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG)) {
+    String out = kakasi.run("正直"); // shoujiki
+} catch (Exception e) {
+    // catch errors here
+}
 ```
 
 ## Maintainers Guide
@@ -59,7 +68,6 @@ cd kakasi-2.3.6
 ./configure \
     CFLAGS="-fPIC" \
     --enable-shared \
-    --disable-static \
     --disable-utf8 \
     --prefix=/tmp/kakasi-linux/
 

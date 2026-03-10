@@ -40,7 +40,7 @@ public class KakasiInitializationTest {
 
     @Test
     public void testTryWithResources() {
-        try (Kakasi kakasi = new Kakasi()) {
+        try (Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG)) {
             boolean success = kakasi.configure(KakasiConstants.ASCII_CONFIG);
             assertTrue(success);
 
