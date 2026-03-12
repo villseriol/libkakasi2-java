@@ -3,7 +3,6 @@
 This project implements a Java-wrapper around the [kakasi](http://kakasi.namazu.org/index.html.en) C
 library. It provides:
 
-- A faithful wrapper around the kakasi C library
 - Instance-based access to the kakasi C library
 - Portability between Windows and Unix systems
 
