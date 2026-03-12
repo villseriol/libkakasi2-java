@@ -37,6 +37,29 @@ try (Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG)) {
 }
 ```
 
+Using your own configuration.
+
+```sh
+> echo '山' | kakasi -ieuc -oeuc -s -S  -f -rhepburn -Fl{ -Fr} -JH
+> 山{ヤマ}
+```
+
+Becomes,
+
+```java
+KakasiConfig config = new KakasiConfig();
+config.setFurigana(true);
+config.setFuriganaLeft("{");
+config.setFuriganaRight("}");
+
+List<KakasiTranslation> translations = new ArrayList<>();
+translations.add(new KakasiTranslation(KakasiCharsetCategory.KANJI, KakasiCharsetCategory.KATAKANA));
+
+Kakasi kakasi = new Kakasi(config);
+String out = kakasi.run("山");
+System.out.println(out);  // 山{ヤマ}
+```
+
 ## Maintainers Guide
 
 ### Prerequisites

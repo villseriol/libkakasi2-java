@@ -13,6 +13,8 @@ public class KakasiFuriganaTest {
     @BeforeEach
     public void setUp() {
         KakasiConfig config = new KakasiConfig(KakasiConstants.ASCII_CONFIG_FURIGANA);
+        config.setFuriganaLeft("{");
+        config.setFuriganaRight("}");
 
         kakasi.configure(config);
 
@@ -23,6 +25,7 @@ public class KakasiFuriganaTest {
 
     @Test
     public void testFurigana() {
-        assertEquals("日本[にっぽん]", kakasi.run("日本"));
+        assertEquals("日本{にっぽん}", kakasi.run("日本"));
+        assertEquals("山{やま}", kakasi.run("山"));
     }
 }

@@ -21,6 +21,8 @@ public class KakasiConfig {
     private boolean wakatigaki;
     private boolean yomi;
     private boolean furigana;
+    private String furiganaLeft;
+    private String furiganaRight;
     private boolean showAllReadings;
     private String separator;
     private KakasiRomaji romaji = KakasiRomaji.HEPBURN;
@@ -52,6 +54,28 @@ public class KakasiConfig {
         this.showAllReadings = target.showAllReadings;
         this.separator = target.separator;
         this.romaji = target.romaji;
+        this.furiganaLeft = target.furiganaLeft;
+        this.furiganaRight = target.furiganaRight;
+    }
+
+
+    public String getFuriganaLeft() {
+        return furiganaLeft;
+    }
+
+
+    public String getFuriganaRight() {
+        return furiganaRight;
+    }
+
+
+    public void setFuriganaLeft(String furiganaLeft) {
+        this.furiganaLeft = furiganaLeft;
+    }
+
+
+    public void setFuriganaRight(String furiganaRight) {
+        this.furiganaRight = furiganaRight;
     }
 
 
@@ -182,6 +206,14 @@ public class KakasiConfig {
             }
 
             arguments.add(String.format("-c%s", sb.toString()));
+        }
+
+        if (furiganaLeft != null && !"".equals(furiganaLeft)) {
+            arguments.add(String.format("-Fl%s", furiganaLeft));
+        }
+
+        if (furiganaRight != null && !"".equals(furiganaRight)) {
+            arguments.add(String.format("-Fr%s", furiganaRight));
         }
 
         if (translations != null) {
