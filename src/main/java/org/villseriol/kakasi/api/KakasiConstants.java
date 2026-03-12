@@ -18,7 +18,7 @@ public final class KakasiConstants {
     /**
      * Converts all japanese to ascii and shows all readings for each word.
      */
-    public static final KakasiConfig ASCII_CONFIG_DEBUG = new KakasiConfig() {
+    public static final KakasiConfig ASCII_CONFIG_ALL_READINGS = new KakasiConfig() {
         {
             setSeparator(" ");
             setShowAllReadings(true);
@@ -30,6 +30,22 @@ public final class KakasiConstants {
                     add(new KakasiTranslation(KakasiCharsetCategory.KATAKANA_JIS, KakasiCharsetCategory.ASCII));
                     add(new KakasiTranslation(KakasiCharsetCategory.SIGN, KakasiCharsetCategory.ASCII));
                     add(new KakasiTranslation(KakasiCharsetCategory.KATAKANA, KakasiCharsetCategory.ASCII));
+                }
+            });
+        }
+    };
+
+    /**
+     * Converts all japanese to ascii and shows furigana in parentheses.
+     */
+    public static final KakasiConfig ASCII_CONFIG_FURIGANA = new KakasiConfig() {
+        {
+            setSeparator(" ");
+            setFurigana(true);
+
+            setTranslations(new HashSet<>() {
+                {
+                    add(new KakasiTranslation(KakasiCharsetCategory.KANJI, KakasiCharsetCategory.HIRAGANA));
                 }
             });
         }

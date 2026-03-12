@@ -11,10 +11,10 @@ import org.villseriol.kakasi.internal.KakasiInOutEncoding;
 
 public class KakasiConfig {
     // Do not change the input and output encoding configuration, this library
-    // abstracts from this
-    // The embedded kakasi library was not compiled to support input utf-8
+    // abstracts from this. The embedded kakasi library was not compiled to
+    // support input strings in utf-8 anyway.
     private static final KakasiInOutEncoding INPUT_ENCODING = KakasiInOutEncoding.EUC;
-    private static final KakasiInOutEncoding OUTPUT_ENCODING = KakasiInOutEncoding.UTF8;
+    private static final KakasiInOutEncoding OUTPUT_ENCODING = KakasiInOutEncoding.EUC;
 
     private Collection<KakasiTranslation> translations;
     private Collection<String> dictionaries;

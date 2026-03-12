@@ -54,16 +54,17 @@ public class KakasiInitializationTest {
 
 
     /**
-    * This is a known issue in the underlying library. If the first phrase you pass into the library is not in
-    * the regular character set, the internal buffers fail to initialize. As a workaround, you should immediately
-    * run it with dummy data to ensure correct behaviour.
-    */
+     * This is a known issue in the underlying library. If the first phrase you
+     * pass into the library is not in the regular character set, the internal
+     * buffers fail to initialize. As a workaround, you should immediately run
+     * it with dummy data to ensure correct behaviour.
+     */
     @Test
     public void testBadBufferInitialization() {
         try (Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG)) {
             assertNotEquals("ka a . ga^den", kakasi.run("珈亜・ガーデン"));
         } catch (Exception e) {
-            fail();
+            fail(e);
         }
     }
 

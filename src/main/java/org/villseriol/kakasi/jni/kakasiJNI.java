@@ -13,6 +13,6 @@ public class kakasiJNI {
   public final static native void set_itaijidict(String jarg1);
   public final static native long load_library(String jarg1);
   public final static native int kakasi_getopt_argv(long jarg1, String[] jarg2);
-  public final static native String kakasi_do(long jarg1, byte[] jarg2);
+  public final static native byte[] kakasi_do(long jarg1, byte[] jarg2);
   public final static native int kakasi_close(long jarg1);
 }

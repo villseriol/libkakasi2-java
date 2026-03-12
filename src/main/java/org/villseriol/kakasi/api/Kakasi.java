@@ -5,7 +5,9 @@ import java.io.Closeable;
 import java.io.File;
 import java.lang.ref.Cleaner;
 import java.lang.ref.Cleaner.Cleanable;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 import org.villseriol.kakasi.internal.KakasiState;
 import org.villseriol.kakasi.internal.NativeLoader;
@@ -19,6 +21,9 @@ import org.villseriol.kakasi.jni.kakasi;
  */
 public class Kakasi implements Closeable {
     private static final Charset EUC_JP = Charset.forName("EUC-JP");
+    private static final CharsetEncoder ENCODER = EUC_JP.newEncoder();
+    private static final int PADDING = (int) Math.ceil(ENCODER.maxBytesPerChar());
+
     private static final Cleaner CLEANER = Cleaner.create();
 
     // Cleaner registration
@@ -89,17 +94,28 @@ public class Kakasi implements Closeable {
             throw new KakasiRuntimeException("Kakasi instance has already been closed.");
         }
 
-        StringBuilder sb = new StringBuilder(input);
-        boolean isNullTerminated = input.endsWith("\0");
-        if (!isNullTerminated) {
-            sb.append("\0");
-        }
-
-        byte[] encodedIn = encodeToEuc(sb.toString());
+        byte[] encodedIn = eucEncodeFromUtf(input);
+        byte[] terminatedIn = new byte[encodedIn.length + PADDING];
+        System.arraycopy(encodedIn, 0, terminatedIn, 0, encodedIn.length);
 
         SWIGTYPE_p_void handle = this.state.getHandle();
 
-        return kakasi.kakasi_do(handle, encodedIn);
+        byte[] encodedOut = kakasi.kakasi_do(handle, terminatedIn);
+
+        return utfDecodeFromEuc(encodedOut);
+    }
+
+
+    /**
+     * Decode the provided byte array.
+     *
+     * @param input the byte array
+     * @return the string
+     */
+    private static String utfDecodeFromEuc(byte[] input) {
+        ByteBuffer buffer = ByteBuffer.wrap(input);
+
+        return EUC_JP.decode(buffer).toString();
     }
 
 
@@ -109,7 +125,7 @@ public class Kakasi implements Closeable {
      * @param input the string
      * @return the byte array
      */
-    private static byte[] encodeToEuc(String input) {
+    private static byte[] eucEncodeFromUtf(String input) {
         return input.getBytes(EUC_JP);
     }
 

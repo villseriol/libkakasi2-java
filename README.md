@@ -9,7 +9,7 @@ library. The impetus for this project was the need to integrate with pre-existin
 What this project provides is:
 
 - A faithful wrapper around the kakasi C library
-- Instance-based access the kakasi C library
+- Instance-based access to the kakasi C library
 - Portability between Windows and Unix systems
 - Clearer unit tests and documentation of behaviour
 
@@ -76,7 +76,7 @@ tar -xvf kakasi-2.3.6.tar.xz
 # 2) Configure + make
 cd kakasi-2.3.6
 ./configure \
-    CFLAGS="-fPIC" \
+    CFLAGS="-fPIC -fsigned-char" \
     --host=x86_64-w64-mingw32 \
     --enable-shared \
     --disable-utf8 \
@@ -98,7 +98,7 @@ tar -xvf kakasi-2.3.6.tar.xz
 # 2) Configure + make
 cd kakasi-2.3.6
 ./configure \
-    CFLAGS="-fPIC" \
+    CFLAGS="-fPIC -fsigned-char" \
     --enable-shared \
     --disable-utf8 \
     --prefix=/tmp/kakasi-linux/

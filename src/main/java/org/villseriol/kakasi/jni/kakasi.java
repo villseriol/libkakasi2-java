@@ -26,7 +26,7 @@ public class kakasi {
     return kakasiJNI.kakasi_getopt_argv(SWIGTYPE_p_void.getCPtr(handle), argc);
   }
 
-  public static String kakasi_do(SWIGTYPE_p_void handle, byte[] str) {
+  public static byte[] kakasi_do(SWIGTYPE_p_void handle, byte[] str) {
     return kakasiJNI.kakasi_do(SWIGTYPE_p_void.getCPtr(handle), str);
   }
 
