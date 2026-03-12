@@ -1,7 +1,7 @@
 # libkakasi2-java
 
 This project implements a Java-wrapper around the [kakasi](http://kakasi.namazu.org/index.html.en) C
-library. This project provides:
+library. It provides:
 
 - A faithful wrapper around the kakasi C library
 - Instance-based access to the kakasi C library
@@ -16,7 +16,7 @@ for more.
 <dependency>
     <groupId>io.github.villseriol</groupId>
     <artifactId>kakasi2</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
