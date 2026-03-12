@@ -27,6 +27,8 @@ public class KakasiConfig {
     private String separator;
     private KakasiRomaji romaji = KakasiRomaji.HEPBURN;
     private Collection<Character> skipCharacters;
+    private KakasiLevel levelHiragana;
+    private KakasiLevel levelFurigana;
 
     public KakasiConfig() {
         super();
@@ -56,6 +58,26 @@ public class KakasiConfig {
         this.romaji = target.romaji;
         this.furiganaLeft = target.furiganaLeft;
         this.furiganaRight = target.furiganaRight;
+    }
+
+
+    public KakasiLevel getLevelFurigana() {
+        return levelFurigana;
+    }
+
+
+    public void setLevelFurigana(KakasiLevel levelFurigana) {
+        this.levelFurigana = levelFurigana;
+    }
+
+
+    public KakasiLevel getLevelHiragana() {
+        return levelHiragana;
+    }
+
+
+    public void setLevelHiragana(KakasiLevel levelHiragana) {
+        this.levelHiragana = levelHiragana;
     }
 
 
@@ -214,6 +236,14 @@ public class KakasiConfig {
 
         if (furiganaRight != null && !"".equals(furiganaRight)) {
             arguments.add(String.format("-Fr%s", furiganaRight));
+        }
+
+        if (levelFurigana != null) {
+            arguments.add(String.format("-L%s", levelFurigana.getCode()));
+        }
+
+        if (levelHiragana != null) {
+            arguments.add(String.format("-l%s", levelHiragana.getCode()));
         }
 
         if (translations != null) {
