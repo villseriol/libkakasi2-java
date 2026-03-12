@@ -76,7 +76,7 @@ tar -xvf kakasi-2.3.6.tar.xz
 # 2) Configure + make
 cd kakasi-2.3.6
 ./configure \
-    CFLAGS="-fPIC -fsigned-char" \
+    CFLAGS="-fPIC" \
     --host=x86_64-w64-mingw32 \
     --enable-shared \
     --disable-utf8 \
@@ -98,7 +98,7 @@ tar -xvf kakasi-2.3.6.tar.xz
 # 2) Configure + make
 cd kakasi-2.3.6
 ./configure \
-    CFLAGS="-fPIC -fsigned-char" \
+    CFLAGS="-fPIC" \
     --enable-shared \
     --disable-utf8 \
     --prefix=/tmp/kakasi-linux/
