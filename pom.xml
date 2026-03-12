@@ -55,6 +55,15 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>**/*.i</exclude>
+          <exclude>**/*.c</exclude>
+        </excludes>
+      </resource>
+    </resources>
     <plugins>
       <!-- Debian Publishing JAR -->
       <!-- <plugin>
