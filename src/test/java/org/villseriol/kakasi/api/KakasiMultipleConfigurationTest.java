@@ -9,10 +9,11 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 
-public class KakasiMultipleConfigurationTest extends AbstractTest {
+public class KakasiMultipleConfigurationTest extends AbstractResourcesTest {
 
     /**
-     * Test to ensure that multiple configured instances of kakasi do not conflict with each other.
+     * Test to ensure that multiple configured instances of kakasi do not
+     * conflict with each other.
      */
     @Test
     public void testSameWordMultipleConfiguration() {

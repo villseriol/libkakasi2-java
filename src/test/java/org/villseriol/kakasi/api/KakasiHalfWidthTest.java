@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class KakasiHalfWidthTest extends AbstractTest {
+public class KakasiHalfWidthTest {
     private Kakasi kakasi = new Kakasi();
 
     @BeforeEach

@@ -11,7 +11,7 @@
     <name>Villseriol</name>
     <url>https://github.com/villseriol</url>
   </organization>
-  <description>A Java wrapper around the Kakasi C library.</description>
+  <description>The kakasi C library ported to Java.</description>
   <developers>
     <developer>
       <id>EY4180</id>

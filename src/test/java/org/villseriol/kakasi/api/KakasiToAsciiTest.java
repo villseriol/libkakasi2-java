@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class KakasiToAsciiTest extends AbstractTest {
+public class KakasiToAsciiTest {
     private Kakasi kakasi = new Kakasi();
 
     @BeforeEach

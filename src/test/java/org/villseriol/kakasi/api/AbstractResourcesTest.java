@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 
-public abstract class AbstractTest {
+public abstract class AbstractResourcesTest {
     /**
      * Loads a test resource given a path.
      *

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class KakasiGeoTest extends AbstractTest {
+public class KakasiGeoTest extends AbstractResourcesTest {
     private Kakasi kakasi = new Kakasi();
 
     @BeforeEach
