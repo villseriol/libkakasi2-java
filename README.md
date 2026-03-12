@@ -1,92 +1,75 @@
 # libkakasi2-java
 
+This project implements a Java-wrapper around the [kakasi](http://kakasi.namazu.org/index.html.en) C
+library. It provides:
+
+- Instance-based access to the kakasi C library
+- Portability between Windows and Unix systems
+
+## Installation
+
+See the [artifact repository](https://central.sonatype.com/artifact/io.github.villseriol/kakasi2)
+for more.
+
+```xml
+<dependency>
+    <groupId>io.github.villseriol</groupId>
+    <artifactId>kakasi2</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
 ## Usage
+
+### Simple Usage
+
 ```java
-KakasiConfig config = KakasiConfig.createDefaultConfig();
-Kakasi.configure(config);
-String out = Kakasi.run("正直");
+Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG);
+String out = kakasi.run("正直"); // shoujiki
 ```
 
-## Maintainers Guide
+### Try-Resources
 
-### Prerequisites
+```java
+try (Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG)) {
+    String out = kakasi.run("正直"); // shoujiki
+} catch (Exception e) {
+    // catch errors here
+}
+```
+
+### Custom Configuration
+
+```java
+KakasiConfig config = new KakasiConfig();
+config.setFurigana(true);
+config.setFuriganaLeft("{");
+config.setFuriganaRight("}");
+
+List<KakasiTranslation> translations = new ArrayList<>();
+translations.add(new KakasiTranslation(KakasiCharsetCategory.KANJI, KakasiCharsetCategory.KATAKANA));
+
+Kakasi kakasi = new Kakasi(config);
+String out = kakasi.run("山");
+System.out.println(out);  // 山{ヤマ}
+```
+
+Is equivalent to,
+
 ```sh
-sudo apt get install \
-    build-essential \
-    x86_64-w64-mingw32-gcc \
-    openjdk-11-jdk
+> echo '山' | kakasi -iutf8 -outf8 -s -S  -f -rhepburn -Fl{ -Fr} -JH
+> 山{ヤマ}
 ```
 
-### Building Kakasi From Source
-To maintain the status of this library as a wrapper, I decided that I would make no modifications to the source code to get things working.
+## Disclaimer
 
-There were a few issues that I had to overcome during the build process:
-1. `iconv` was not working in the `.dll` build, meaning I had to turn off utf8 processing
-2. I tried using `msys2` to build natively on Windows, but cross compiling ended up being simpler
-3. `kakasi` embeds `KANWADICT` and `ITAIJIDICT` paths at compile-time, meaning I had to get clever about setting this at runtime.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
-#### Windows
-```sh
-# 1) Download the archive
-wget http://kakasi.namazu.org/stable/kakasi-2.3.6.tar.xz
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
 
-# 2) Extract the archive
-tar -xvf kakasi-2.3.6.tar.xz
-
-# 2) Configure + make
-cd kakasi-2.3.6
-./configure \
-    CFLAGS="-fPIC" \
-    --host=x86_64-w64-mingw32 \
-    --disable-shared \
-    --enable-static \
-    --disable-utf8 \
-    --prefix=/tmp/kakasi-win/
-
-make
-make install
-```
-
-#### Linux
-```sh
-# 1) Download the archive
-wget http://kakasi.namazu.org/stable/kakasi-2.3.6.tar.xz
-
-# 2) Extract the archive
-tar -xvf kakasi-2.3.6.tar.xz
-
-# 2) Configure + make
-cd kakasi-2.3.6
-./configure \
-    CFLAGS="-fPIC" \
-    --disable-shared \
-    --enable-static \
-    --disable-utf8 \
-    --prefix=/tmp/kakasi-linux/
-
-make
-make install
-```
-
-### Compiling SWIG
-```sh
-./scripts/swig.sh
-```
-
-### Compiling Embedded Library
-```sh
-./scripts/compile-windows.sh
-# or
-./scripts/compile.sh
-```
-
-## License
-Under normal circumstances, I would have preferred using the shared-library implementation of `kakasi` to decouple the underlying library from my wrapper. The reasons for using the static library were:
-1. The small size of the underlying library
-2. The frequency of updates to the library
-3. The platform independent nature of Java
-4. Standalone projects being easier to integrate
-
-As such, this project inherits a version of the GPL license originally used in version 2.3.6 of the `kakasi` C library.
-
-Based on a work from http://kakasi.namazu.org/index.html.en
+You should have received a copy of the GNU General Public License along with this program. If not,
+see <https://www.gnu.org/licenses/>.

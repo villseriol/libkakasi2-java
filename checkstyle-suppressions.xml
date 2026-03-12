@@ -3,4 +3,5 @@
 <suppressions>
     <suppress files="kakasi\.java" checks="[a-zA-Z0-9]*" />
     <suppress files="kakasiJNI\.java" checks="[a-zA-Z0-9]*" />
+    <suppress files="SWIGTYPE_p_void\.java" checks="[a-zA-Z0-9]*" />
 </suppressions>

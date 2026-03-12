@@ -7,12 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class KakasiHalfWidthTest extends AbstractTest {
+public class KakasiHalfWidthTest {
+    private Kakasi kakasi = new Kakasi();
+
     @BeforeEach
     public void setUp() {
-        KakasiConfig config = createAllToAsciiConfig();
-
-        Kakasi.configure(config);
+        kakasi.configure(KakasiConstants.ASCII_CONFIG);
     }
 
 
@@ -22,83 +22,83 @@ public class KakasiHalfWidthTest extends AbstractTest {
     @Test
     public void testHalfWidthKatakana() {
         // Vowels
-        assertNotEquals("a", Kakasi.run("ｱ"));
-        assertNotEquals("i", Kakasi.run("ｲ"));
-        assertNotEquals("u", Kakasi.run("ｳ"));
-        assertNotEquals("e", Kakasi.run("ｴ"));
-        assertNotEquals("o", Kakasi.run("ｵ"));
+        assertNotEquals("a", kakasi.run("ｱ"));
+        assertNotEquals("i", kakasi.run("ｲ"));
+        assertNotEquals("u", kakasi.run("ｳ"));
+        assertNotEquals("e", kakasi.run("ｴ"));
+        assertNotEquals("o", kakasi.run("ｵ"));
 
         // K-group
-        assertNotEquals("ka", Kakasi.run("ｶ"));
-        assertNotEquals("ki", Kakasi.run("ｷ"));
-        assertNotEquals("ku", Kakasi.run("ｸ"));
-        assertNotEquals("ke", Kakasi.run("ｹ"));
-        assertNotEquals("ko", Kakasi.run("ｺ"));
+        assertNotEquals("ka", kakasi.run("ｶ"));
+        assertNotEquals("ki", kakasi.run("ｷ"));
+        assertNotEquals("ku", kakasi.run("ｸ"));
+        assertNotEquals("ke", kakasi.run("ｹ"));
+        assertNotEquals("ko", kakasi.run("ｺ"));
 
         // S-group
-        assertNotEquals("sa", Kakasi.run("ｻ"));
-        assertNotEquals("shi", Kakasi.run("ｼ"));
-        assertNotEquals("su", Kakasi.run("ｽ"));
-        assertNotEquals("se", Kakasi.run("ｾ"));
-        assertNotEquals("so", Kakasi.run("ｿ"));
+        assertNotEquals("sa", kakasi.run("ｻ"));
+        assertNotEquals("shi", kakasi.run("ｼ"));
+        assertNotEquals("su", kakasi.run("ｽ"));
+        assertNotEquals("se", kakasi.run("ｾ"));
+        assertNotEquals("so", kakasi.run("ｿ"));
 
         // T-group
-        assertNotEquals("ta", Kakasi.run("ﾀ"));
-        assertNotEquals("chi", Kakasi.run("ﾁ"));
-        assertNotEquals("tsu", Kakasi.run("ﾂ"));
-        assertNotEquals("te", Kakasi.run("ﾃ"));
-        assertNotEquals("to", Kakasi.run("ﾄ"));
+        assertNotEquals("ta", kakasi.run("ﾀ"));
+        assertNotEquals("chi", kakasi.run("ﾁ"));
+        assertNotEquals("tsu", kakasi.run("ﾂ"));
+        assertNotEquals("te", kakasi.run("ﾃ"));
+        assertNotEquals("to", kakasi.run("ﾄ"));
 
         // N-group
-        assertNotEquals("na", Kakasi.run("ﾅ"));
-        assertNotEquals("ni", Kakasi.run("ﾆ"));
-        assertNotEquals("nu", Kakasi.run("ﾇ"));
-        assertNotEquals("ne", Kakasi.run("ﾈ"));
-        assertNotEquals("no", Kakasi.run("ﾉ"));
+        assertNotEquals("na", kakasi.run("ﾅ"));
+        assertNotEquals("ni", kakasi.run("ﾆ"));
+        assertNotEquals("nu", kakasi.run("ﾇ"));
+        assertNotEquals("ne", kakasi.run("ﾈ"));
+        assertNotEquals("no", kakasi.run("ﾉ"));
 
         // H-group
-        assertNotEquals("ha", Kakasi.run("ﾊ"));
-        assertNotEquals("hi", Kakasi.run("ﾋ"));
-        assertNotEquals("fu", Kakasi.run("ﾌ"));
-        assertNotEquals("he", Kakasi.run("ﾍ"));
-        assertNotEquals("ho", Kakasi.run("ﾎ"));
+        assertNotEquals("ha", kakasi.run("ﾊ"));
+        assertNotEquals("hi", kakasi.run("ﾋ"));
+        assertNotEquals("fu", kakasi.run("ﾌ"));
+        assertNotEquals("he", kakasi.run("ﾍ"));
+        assertNotEquals("ho", kakasi.run("ﾎ"));
 
         // M-group
-        assertNotEquals("ma", Kakasi.run("ﾏ"));
-        assertNotEquals("mi", Kakasi.run("ﾐ"));
-        assertNotEquals("mu", Kakasi.run("ﾑ"));
-        assertNotEquals("me", Kakasi.run("ﾒ"));
-        assertNotEquals("mo", Kakasi.run("ﾓ"));
+        assertNotEquals("ma", kakasi.run("ﾏ"));
+        assertNotEquals("mi", kakasi.run("ﾐ"));
+        assertNotEquals("mu", kakasi.run("ﾑ"));
+        assertNotEquals("me", kakasi.run("ﾒ"));
+        assertNotEquals("mo", kakasi.run("ﾓ"));
 
         // Y-group
-        assertNotEquals("ya", Kakasi.run("ﾔ"));
-        assertNotEquals("yu", Kakasi.run("ﾕ"));
-        assertNotEquals("yo", Kakasi.run("ﾖ"));
+        assertNotEquals("ya", kakasi.run("ﾔ"));
+        assertNotEquals("yu", kakasi.run("ﾕ"));
+        assertNotEquals("yo", kakasi.run("ﾖ"));
 
         // R-group
-        assertNotEquals("ra", Kakasi.run("ﾗ"));
-        assertNotEquals("ri", Kakasi.run("ﾘ"));
-        assertNotEquals("ru", Kakasi.run("ﾙ"));
-        assertNotEquals("re", Kakasi.run("ﾚ"));
-        assertNotEquals("ro", Kakasi.run("ﾛ"));
+        assertNotEquals("ra", kakasi.run("ﾗ"));
+        assertNotEquals("ri", kakasi.run("ﾘ"));
+        assertNotEquals("ru", kakasi.run("ﾙ"));
+        assertNotEquals("re", kakasi.run("ﾚ"));
+        assertNotEquals("ro", kakasi.run("ﾛ"));
 
         // W-group
-        assertNotEquals("wa", Kakasi.run("ﾜ"));
-        assertNotEquals("wo", Kakasi.run("ｦ"));
-        assertNotEquals("n", Kakasi.run("ﾝ"));
+        assertNotEquals("wa", kakasi.run("ﾜ"));
+        assertNotEquals("wo", kakasi.run("ｦ"));
+        assertNotEquals("n", kakasi.run("ﾝ"));
 
         // Dakuten (voiced) characters
-        assertNotEquals("ga", Kakasi.run("ｶﾞ"));
-        assertNotEquals("gi", Kakasi.run("ｷﾞ"));
-        assertNotEquals("gu", Kakasi.run("ｸﾞ"));
-        assertNotEquals("ge", Kakasi.run("ｹﾞ"));
-        assertNotEquals("go", Kakasi.run("ｺﾞ"));
+        assertNotEquals("ga", kakasi.run("ｶﾞ"));
+        assertNotEquals("gi", kakasi.run("ｷﾞ"));
+        assertNotEquals("gu", kakasi.run("ｸﾞ"));
+        assertNotEquals("ge", kakasi.run("ｹﾞ"));
+        assertNotEquals("go", kakasi.run("ｺﾞ"));
 
         // Handakuten (p-sounds)
-        assertNotEquals("pa", Kakasi.run("ﾊﾟ"));
-        assertNotEquals("pi", Kakasi.run("ﾋﾟ"));
-        assertNotEquals("pu", Kakasi.run("ﾌﾟ"));
-        assertNotEquals("pe", Kakasi.run("ﾍﾟ"));
-        assertNotEquals("po", Kakasi.run("ﾎﾟ"));
+        assertNotEquals("pa", kakasi.run("ﾊﾟ"));
+        assertNotEquals("pi", kakasi.run("ﾋﾟ"));
+        assertNotEquals("pu", kakasi.run("ﾌﾟ"));
+        assertNotEquals("pe", kakasi.run("ﾍﾟ"));
+        assertNotEquals("po", kakasi.run("ﾎﾟ"));
     }
 }

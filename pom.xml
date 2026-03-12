@@ -5,13 +5,13 @@
   <groupId>io.github.villseriol</groupId>
   <artifactId>kakasi2</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1</version>
+  <version>2.0.0</version>
   <name>libkakasi2</name>
   <organization>
     <name>Villseriol</name>
     <url>https://github.com/villseriol</url>
   </organization>
-  <description>A Java wrapper around the Kakasi C library.</description>
+  <description>The kakasi C library ported to Java.</description>
   <developers>
     <developer>
       <id>EY4180</id>
@@ -55,6 +55,15 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>**/*.i</exclude>
+          <exclude>**/*.c</exclude>
+        </excludes>
+      </resource>
+    </resources>
     <plugins>
       <!-- Debian Publishing JAR -->
       <!-- <plugin>

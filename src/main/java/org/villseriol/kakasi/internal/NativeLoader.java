@@ -1,6 +1,7 @@
 // This software is released into the Public Domain.  See copying.txt for details.
 package org.villseriol.kakasi.internal;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -11,64 +12,80 @@ import org.villseriol.kakasi.jni.kakasi;
 
 
 public final class NativeLoader {
-    private static boolean isLibraryLoaded = false;
-    private static boolean isDataLoaded = false;
+    private static volatile boolean isLoaderLoaded = false;
+    private static volatile boolean isDictionaryLoaded = false;
 
     private NativeLoader() {
         super();
     }
 
 
-    public static void loadDataFiles() {
-        if (isDataLoaded) {
-            return; // load only once
-        }
-
-        Path tempDir;
-        try {
-            // Create a temporary folder
-            tempDir = Files.createTempDirectory("kakasi_data");
-            tempDir.toFile().deleteOnExit();
-
-            String kanwaDictPath = "/data/kanwadict";
-            try (InputStream in = NativeLoader.class.getResourceAsStream(kanwaDictPath)) {
-                if (in == null) {
-                    throw new RuntimeException("Resource not found: " + kanwaDictPath);
-                }
-
-                Path tempFile = tempDir.resolve("kanwadict");
-                Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
-                tempFile.toFile().deleteOnExit();
-
-                kakasi.set_kanwadict(tempFile.toAbsolutePath().toString());
+    /**
+     * A helper method to return a file from resources. The resource is copied to a temporary file
+     * using provided prefix and suffix. It is deleted on exit.
+     *
+     * @param path the resource path
+     * @param prefix the prefix of the temporary file
+     * @param suffix the suffix of the temporary file
+     * @return the file
+     */
+    private static File loadFromResources(String path, String prefix, String suffix) {
+        try (InputStream in = NativeLoader.class.getResourceAsStream(path)) {
+            if (in == null) {
+                throw new RuntimeException("Resource not found: " + path);
             }
 
-            String itaijiDictPath = "/data/itaijidict";
-            try (InputStream in = NativeLoader.class.getResourceAsStream(itaijiDictPath)) {
-                if (in == null) {
-                    throw new RuntimeException("Resource not found: " + itaijiDictPath);
-                }
+            Path temp = Files.createTempFile(prefix, suffix);
+            temp.toFile().deleteOnExit();
 
-                Path tempFile = tempDir.resolve("itaijidict");
-                Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
-                tempFile.toFile().deleteOnExit();
+            Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
 
-                kakasi.set_itaijidict(tempFile.toAbsolutePath().toString());
-            }
-
-            isDataLoaded = true;
+            return temp.toFile();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load Kakasi data folder", e);
+            throw new RuntimeException("Failed to load native library", e);
         }
     }
 
 
-    public static void loadLibrary() {
-        if (isLibraryLoaded) {
+    public static File loadNewKakasiLibrary() {
+        String os = System.getProperty("os.name").toLowerCase();
+        String libFileName;
+        String resourcePath;
+        String tempSuffix;
+
+        if (os.contains("win")) {
+            libFileName = "libkakasi.dll";
+            resourcePath = "/native/windows/" + libFileName;
+            tempSuffix = ".dll";
+        } else if (os.contains("linux")) {
+            libFileName = "libkakasi.so";
+            resourcePath = "/native/linux/" + libFileName;
+            tempSuffix = ".so";
+        } else {
+            throw new UnsupportedOperationException("Unsupported OS: " + os);
+        }
+
+        return loadFromResources(resourcePath, "libkakasi", tempSuffix);
+    }
+
+
+    public static synchronized void bootstrapDataFiles() {
+        if (isDictionaryLoaded) {
             return; // load only once
         }
 
-        if (isLibraryLoaded) {
+        File kanwadict = loadFromResources("/data/kanwadict", "kanwadict", ".tmp");
+        File itaijidict = loadFromResources("/data/itaijidict", "itaijidict", ".tmp");
+
+        kakasi.set_kanwadict(kanwadict.getAbsolutePath());
+        kakasi.set_itaijidict(itaijidict.getAbsolutePath());
+
+        isDictionaryLoaded = true;
+    }
+
+
+    public static synchronized void bootstrapLoaderLibrary() {
+        if (isLoaderLoaded) {
             return; // load only once
         }
 
@@ -89,20 +106,10 @@ public final class NativeLoader {
             throw new UnsupportedOperationException("Unsupported OS: " + os);
         }
 
-        try (InputStream in = NativeLoader.class.getResourceAsStream(resourcePath)) {
-            if (in == null) {
-                throw new RuntimeException("Native library not found in resources: " + resourcePath);
-            }
+        File library = loadFromResources(resourcePath, "libkakasi_jni", tempSuffix);
 
-            Path temp = Files.createTempFile("kakasi_jni", tempSuffix);
-            temp.toFile().deleteOnExit();
+        System.load(library.getAbsolutePath());
 
-            Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
-            System.load(temp.toAbsolutePath().toString());
-
-            isLibraryLoaded = true;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load native library", e);
-        }
+        isLoaderLoaded = true;
     }
 }
