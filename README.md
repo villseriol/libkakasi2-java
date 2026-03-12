@@ -57,7 +57,7 @@ System.out.println(out);  // 山{ヤマ}
 Is equivalent to,
 
 ```sh
-> echo '山' | kakasi -ieuc -oeuc -s -S  -f -rhepburn -Fl{ -Fr} -JH
+> echo '山' | kakasi -iutf8 -outf8 -s -S  -f -rhepburn -Fl{ -Fr} -JH
 > 山{ヤマ}
 ```
 
