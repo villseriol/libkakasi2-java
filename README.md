@@ -1,33 +1,35 @@
 # libkakasi2-java
 
-## About
-
 This project implements a Java-wrapper around the [kakasi](http://kakasi.namazu.org/index.html.en) C
-library. The impetus for this project was the need to integrate with pre-existing OSM tools like
-`osmium` and `osmosis`. See [this](https://github.com/villseriol/osmosis) project as an example.
-
-What this project provides is:
+library. This project provides:
 
 - A faithful wrapper around the kakasi C library
 - Instance-based access to the kakasi C library
 - Portability between Windows and Unix systems
-- Clearer unit tests and documentation of behaviour
 
 ## Installation
 
 See the [artifact repository](https://central.sonatype.com/artifact/io.github.villseriol/kakasi2)
-for installation instructions.
+for more.
+
+```xml
+<dependency>
+    <groupId>io.github.villseriol</groupId>
+    <artifactId>kakasi2</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
 
 ## Usage
 
-Using instance method.
+### Simple Usage
 
 ```java
 Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG);
 String out = kakasi.run("正直"); // shoujiki
 ```
 
-Using try-resources method.
+### Try-Resources
 
 ```java
 try (Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG)) {
@@ -37,14 +39,7 @@ try (Kakasi kakasi = new Kakasi(KakasiConstants.ASCII_CONFIG)) {
 }
 ```
 
-Using your own configuration.
-
-```sh
-> echo '山' | kakasi -ieuc -oeuc -s -S  -f -rhepburn -Fl{ -Fr} -JH
-> 山{ヤマ}
-```
-
-Becomes,
+### Custom Configuration
 
 ```java
 KakasiConfig config = new KakasiConfig();
@@ -60,88 +55,11 @@ String out = kakasi.run("山");
 System.out.println(out);  // 山{ヤマ}
 ```
 
-## Maintainers Guide
-
-### Prerequisites
+Is equivalent to,
 
 ```sh
-sudo apt get install \
-    build-essential \
-    x86_64-w64-mingw32-gcc \
-    openjdk-11-jdk
-```
-
-### Building Kakasi From Source
-
-To maintain the status of this library as a wrapper, I decided that I would make no modifications to
-the source code to get things working.
-
-There were a few issues that I had to overcome during the build process:
-
-1. `iconv` was not working in the `.dll` build, meaning I had to turn off utf8 processing
-2. I tried using `msys2` to build natively on Windows, but cross compiling ended up being simpler
-3. `kakasi` embeds `KANWADICT` and `ITAIJIDICT` paths at compile-time, meaning I had to get clever
-   about setting this at runtime.
-4. The static implementation meant that it was impossible to guarantee what configuration kakasi
-   would have at runtime. This is because configuring kakasi more than once would override previous
-   configurations. I updated everything to be instance-based by adding a wrapper around
-   system-specific loaders that allow scoped library loading.
-
-#### Windows
-
-```sh
-# 1) Download the archive
-wget http://kakasi.namazu.org/stable/kakasi-2.3.6.tar.xz
-
-# 2) Extract the archive
-tar -xvf kakasi-2.3.6.tar.xz
-
-# 2) Configure + make
-cd kakasi-2.3.6
-./configure \
-    CFLAGS="-fPIC" \
-    --host=x86_64-w64-mingw32 \
-    --enable-shared \
-    --disable-utf8 \
-    --prefix=/tmp/kakasi-win/
-
-make
-make install
-```
-
-#### Linux
-
-```sh
-# 1) Download the archive
-wget http://kakasi.namazu.org/stable/kakasi-2.3.6.tar.xz
-
-# 2) Extract the archive
-tar -xvf kakasi-2.3.6.tar.xz
-
-# 2) Configure + make
-cd kakasi-2.3.6
-./configure \
-    CFLAGS="-fPIC" \
-    --enable-shared \
-    --disable-utf8 \
-    --prefix=/tmp/kakasi-linux/
-
-make
-make install
-```
-
-### Compiling SWIG
-
-```sh
-./scripts/swig.sh
-```
-
-### Compiling Embedded Library
-
-```sh
-./scripts/compile-windows.sh
-# or
-./scripts/compile.sh
+> echo '山' | kakasi -ieuc -oeuc -s -S  -f -rhepburn -Fl{ -Fr} -JH
+> 山{ヤマ}
 ```
 
 ## Disclaimer
