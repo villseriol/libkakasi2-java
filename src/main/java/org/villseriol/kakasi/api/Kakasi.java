@@ -6,8 +6,11 @@ import java.io.File;
 import java.lang.ref.Cleaner;
 import java.lang.ref.Cleaner.Cleanable;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
 
 import org.villseriol.kakasi.internal.KakasiState;
 import org.villseriol.kakasi.internal.NativeLoader;
@@ -21,8 +24,14 @@ import org.villseriol.kakasi.jni.kakasi;
  */
 public class Kakasi implements Closeable {
     private static final Charset EUC_JP = Charset.forName("EUC-JP");
-    private static final CharsetEncoder ENCODER = EUC_JP.newEncoder();
-    private static final int PADDING = (int) Math.ceil(ENCODER.maxBytesPerChar());
+
+    private static final ThreadLocal<CharsetEncoder> ENCODER = ThreadLocal.withInitial(() -> {
+        return EUC_JP.newEncoder().onUnmappableCharacter(CodingErrorAction.REPLACE)
+                .onMalformedInput(CodingErrorAction.REPLACE);
+    });
+
+    // The maximum number of bytes of an euc-jp encoded character
+    private static final int MAX_BYTES_PER_CHARACTER = (int) Math.ceil(ENCODER.get().maxBytesPerChar());
 
     private static final Cleaner CLEANER = Cleaner.create();
 
@@ -94,28 +103,15 @@ public class Kakasi implements Closeable {
             throw new KakasiRuntimeException("Kakasi instance has already been closed.");
         }
 
-        byte[] encodedIn = eucEncodeFromUtf(input);
-        byte[] terminatedIn = new byte[encodedIn.length + PADDING];
-        System.arraycopy(encodedIn, 0, terminatedIn, 0, encodedIn.length);
+        // Worse case scenario buffer for input + null termination byte
+        byte[] bufferIn = new byte[(input.length() + 1) * MAX_BYTES_PER_CHARACTER];
+        encodeToEucJpFromUtf(input, bufferIn);
 
         SWIGTYPE_p_void handle = this.state.getHandle();
 
-        byte[] encodedOut = kakasi.kakasi_do(handle, terminatedIn);
+        byte[] encodedOut = kakasi.kakasi_do(handle, bufferIn);
 
-        return utfDecodeFromEuc(encodedOut);
-    }
-
-
-    /**
-     * Decode the provided byte array.
-     *
-     * @param input the byte array
-     * @return the string
-     */
-    private static String utfDecodeFromEuc(byte[] input) {
-        ByteBuffer buffer = ByteBuffer.wrap(input);
-
-        return EUC_JP.decode(buffer).toString();
+        return new String(encodedOut);
     }
 
 
@@ -123,10 +119,22 @@ public class Kakasi implements Closeable {
      * Encode the provided string into a byte array using the EUC-JP encoding.
      *
      * @param input the string
-     * @return the byte array
+     * @param buffer the buffer
      */
-    private static byte[] eucEncodeFromUtf(String input) {
-        return input.getBytes(EUC_JP);
+    public static void encodeToEucJpFromUtf(String input, byte[] buffer) {
+        CharsetEncoder encoder = ENCODER.get();
+        encoder.reset();
+
+        ByteBuffer outBuffer = ByteBuffer.wrap(buffer);
+        CharBuffer inBuffer = CharBuffer.wrap(input);
+
+        CoderResult result = encoder.encode(inBuffer, outBuffer, true);
+
+        if (result.isError()) {
+            throw new KakasiRuntimeException("Kakasi failed to encode input.");
+        }
+
+        encoder.flush(outBuffer);
     }
 
 

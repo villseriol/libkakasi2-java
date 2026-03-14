@@ -217,7 +217,7 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
       #include <dlfcn.h>
     #endif
 
-    typedef char euc_byte_t;
+    typedef char kakasi_byte_t;
     typedef int (*kakasi_getopt_argv_t)(int argc, char **argv);
     typedef char* (*kakasi_do_t)(char *str);
 
@@ -291,7 +291,7 @@ int kakasi_getopt_argv(void *handle, int argc, char **argv) {
     return portable_kakasi_getopt_argv(handle, argc, argv);
 }
 
-euc_byte_t *kakasi_do(void *handle, euc_byte_t *str) {
+kakasi_byte_t *kakasi_do(void *handle, kakasi_byte_t *str) {
    return portable_kakasi_do(handle, str);
 }
 
@@ -399,25 +399,25 @@ SWIGEXPORT jint JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1getopt_
 SWIGEXPORT jbyteArray JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1do(JNIEnv *jenv, jclass jcls, jlong jarg1, jbyteArray jarg2) {
   jbyteArray jresult = 0 ;
   void *arg1 = (void *) 0 ;
-  euc_byte_t *arg2 = (euc_byte_t *) 0 ;
-  euc_byte_t *result = 0 ;
+  kakasi_byte_t *arg2 = (kakasi_byte_t *) 0 ;
+  kakasi_byte_t *result = 0 ;
   
   (void)jenv;
   (void)jcls;
   arg1 = *(void **)&jarg1; 
   arg2 = 0;
   if (jarg2) {
-    arg2 = (euc_byte_t *)(*jenv)->GetByteArrayElements(jenv, jarg2, 0);
+    arg2 = (kakasi_byte_t *)(*jenv)->GetByteArrayElements(jenv, jarg2, 0);
     if (!arg2) return 0;
   }
-  result = (euc_byte_t *)kakasi_do(arg1,arg2);
+  result = (kakasi_byte_t *)kakasi_do(arg1,arg2);
   if (result) {
     int len = strlen(result);
     jresult = (*jenv)->NewByteArray(jenv, len);
-    (*jenv)->SetByteArrayRegion(jenv, jresult, 0, len, (const euc_byte_t *)result);
+    (*jenv)->SetByteArrayRegion(jenv, jresult, 0, len, (const kakasi_byte_t *)result);
     free((void*)result);
   }
-  if (arg2) (*jenv)->ReleaseByteArrayElements(jenv, jarg2, (euc_byte_t *)arg2, 0);
+  if (arg2) (*jenv)->ReleaseByteArrayElements(jenv, jarg2, (kakasi_byte_t *)arg2, 0);
   return jresult;
 }
 

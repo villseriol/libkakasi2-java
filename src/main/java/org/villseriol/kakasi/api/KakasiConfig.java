@@ -14,7 +14,7 @@ public class KakasiConfig {
     // abstracts from this. The embedded kakasi library was not compiled to
     // support input strings in utf-8 anyway.
     private static final KakasiInOutEncoding INPUT_ENCODING = KakasiInOutEncoding.EUC;
-    private static final KakasiInOutEncoding OUTPUT_ENCODING = KakasiInOutEncoding.EUC;
+    private static final KakasiInOutEncoding OUTPUT_ENCODING = KakasiInOutEncoding.UTF8;
 
     private Collection<KakasiTranslation> translations;
     private Collection<String> dictionaries;
