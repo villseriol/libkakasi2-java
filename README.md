@@ -48,6 +48,7 @@ config.setFuriganaRight("}");
 
 List<KakasiTranslation> translations = new ArrayList<>();
 translations.add(new KakasiTranslation(KakasiCharsetCategory.KANJI, KakasiCharsetCategory.KATAKANA));
+config.setTranslations(translations);
 
 Kakasi kakasi = new Kakasi(config);
 String out = kakasi.run("山");
