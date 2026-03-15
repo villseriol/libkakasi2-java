@@ -11,51 +11,87 @@ import org.villseriol.kakasi.internal.KakasiInOutEncoding;
 
 public class KakasiConfig {
     // Do not change the input and output encoding configuration, this library
-    // abstracts from this. The embedded kakasi library was not compiled to
-    // support input strings in utf-8 anyway.
+    // abstracts from this.
+    // 1. If utf8 input is provided, kakasi converts it to euc anyway
+    // 2. The utf8 output being computed in C leads to small performance gains
     private static final KakasiInOutEncoding INPUT_ENCODING = KakasiInOutEncoding.EUC;
-    private static final KakasiInOutEncoding OUTPUT_ENCODING = KakasiInOutEncoding.EUC;
+    private static final KakasiInOutEncoding OUTPUT_ENCODING = KakasiInOutEncoding.UTF8;
 
     private Collection<KakasiTranslation> translations;
     private Collection<String> dictionaries;
     private boolean wakatigaki;
     private boolean yomi;
-    private boolean furigana;
     private String furiganaLeft;
     private String furiganaRight;
     private boolean showAllReadings;
     private String separator;
     private KakasiRomaji romaji = KakasiRomaji.HEPBURN;
     private Collection<Character> skipCharacters;
+    private KakasiKanjiGrade hiraganaGrade;
+    private KakasiKanjiGrade furiganaGrade;
 
     public KakasiConfig() {
         super();
     }
 
 
-    public KakasiConfig(KakasiConfig target) {
+    public KakasiConfig(KakasiConfig other) {
         super();
 
-        Optional.ofNullable(target.translations).ifPresent((value) -> {
+        Optional.ofNullable(other.translations).ifPresent((value) -> {
             this.translations = new ArrayList<>(value);
         });
 
-        Optional.ofNullable(target.dictionaries).ifPresent((value) -> {
+        Optional.ofNullable(other.dictionaries).ifPresent((value) -> {
             this.dictionaries = new ArrayList<>(value);
         });
 
-        Optional.ofNullable(target.skipCharacters).ifPresent((value) -> {
+        Optional.ofNullable(other.skipCharacters).ifPresent((value) -> {
             this.skipCharacters = new ArrayList<>(value);
         });
 
-        this.wakatigaki = target.wakatigaki;
-        this.yomi = target.yomi;
-        this.furigana = target.furigana;
-        this.showAllReadings = target.showAllReadings;
-        this.separator = target.separator;
-        this.romaji = target.romaji;
-        this.furiganaLeft = target.furiganaLeft;
-        this.furiganaRight = target.furiganaRight;
+        this.wakatigaki = other.wakatigaki;
+        this.yomi = other.yomi;
+        this.showAllReadings = other.showAllReadings;
+        this.separator = other.separator;
+        this.romaji = other.romaji;
+        this.furiganaLeft = other.furiganaLeft;
+        this.furiganaRight = other.furiganaRight;
+        this.furiganaGrade = other.furiganaGrade;
+        this.hiraganaGrade = other.hiraganaGrade;
+    }
+
+
+    public KakasiKanjiGrade getFuriganaGrade() {
+        return furiganaGrade;
+    }
+
+
+    /**
+     * All kanji above the provided grade (non-inclusive) will have attached
+     * furigana (if kanji-hiragana is enabled). Overridden by hiragana grade.
+     *
+     * @param furiganaGrade the grade
+     */
+    public void setFuriganaGrade(KakasiKanjiGrade furiganaGrade) {
+        this.furiganaGrade = furiganaGrade;
+    }
+
+
+    public KakasiKanjiGrade getHiraganaGrade() {
+        return hiraganaGrade;
+    }
+
+
+    /**
+     * All kanji above the provided grade (non-inclusive) will be translated to
+     * hiragana (if kanji-hiragana is enabled). Takes precedence over furigana
+     * grade.
+     *
+     * @param hiraganaGrade the grade
+     */
+    public void setHiraganaGrade(KakasiKanjiGrade hiraganaGrade) {
+        this.hiraganaGrade = hiraganaGrade;
     }
 
 
@@ -96,16 +132,6 @@ public class KakasiConfig {
 
     public boolean isShowAllReadings() {
         return showAllReadings;
-    }
-
-
-    public void setFurigana(boolean furigana) {
-        this.furigana = furigana;
-    }
-
-
-    public boolean isFurigana() {
-        return furigana;
     }
 
 
@@ -187,8 +213,8 @@ public class KakasiConfig {
             arguments.add("-w");
         }
 
-        if (furigana) {
-            arguments.add("-f");
+        if (furiganaGrade != null) {
+            arguments.add(String.format("-L%s", furiganaGrade.getCode()));
         }
 
         if (showAllReadings) {
@@ -214,6 +240,10 @@ public class KakasiConfig {
 
         if (furiganaRight != null && !"".equals(furiganaRight)) {
             arguments.add(String.format("-Fr%s", furiganaRight));
+        }
+
+        if (hiraganaGrade != null) {
+            arguments.add(String.format("-l%s", hiraganaGrade.getCode()));
         }
 
         if (translations != null) {

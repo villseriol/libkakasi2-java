@@ -10,7 +10,7 @@
       #include <dlfcn.h>
     #endif
 
-    typedef char euc_byte_t;
+    typedef char kakasi_byte_t;
     typedef int (*kakasi_getopt_argv_t)(int argc, char **argv);
     typedef char* (*kakasi_do_t)(char *str);
 
@@ -70,8 +70,8 @@
 
 %include "argv.i"
 
-/* euc_byte_t * - treat as byte[] */
-%typemap(in, noblock=1) euc_byte_t * {
+/* kakasi_byte_t * - treat as byte[] */
+%typemap(in, noblock=1) kakasi_byte_t * {
  $1 = 0;
   if ($input) {
     $1 = ($1_ltype)JCALL2(GetByteArrayElements, jenv, $input, 0);
@@ -79,7 +79,7 @@
   }
 }
 
-%typemap(directorout, noblock=1, warning=SWIGWARN_TYPEMAP_DIRECTOROUT_PTR_MSG) euc_byte_t * {
+%typemap(directorout, noblock=1, warning=SWIGWARN_TYPEMAP_DIRECTOROUT_PTR_MSG) kakasi_byte_t * {
   $1 = 0;
   if ($input) {
     $result = ($1_ltype)JCALL2(GetByteArrayElements, jenv, $input, 0);
@@ -87,35 +87,35 @@
   }
 }
 
-%typemap(directorin, descriptor="[B", noblock=1) euc_byte_t * {
+%typemap(directorin, descriptor="[B", noblock=1) kakasi_byte_t * {
   $input = 0;
   if ($1) {
     int len = strlen($1);
     jbyteArray arr = JCALL1(NewByteArray, jenv, len);
-    $input = JCALL4(SetByteArrayRegion, jenv, arr, 0, len, (const euc_byte_t *)$1);
+    $input = JCALL4(SetByteArrayRegion, jenv, arr, 0, len, (const kakasi_byte_t *)$1);
     free((void*)$1);
     if (!$input) return $null;
   }
   Swig::LocalRefGuard $1_refguard(jenv, $input);
 }
 
-%typemap(freearg, noblock=1) euc_byte_t * { if ($1) JCALL3(ReleaseByteArrayElements, jenv, $input, (euc_byte_t *)$1, 0); }
-%typemap(out, noblock=1) euc_byte_t * { 
+%typemap(freearg, noblock=1) kakasi_byte_t * { if ($1) JCALL3(ReleaseByteArrayElements, jenv, $input, (kakasi_byte_t *)$1, 0); }
+%typemap(out, noblock=1) kakasi_byte_t * { 
     if ($1) {
         int len = strlen($1);
         $result = JCALL1(NewByteArray, jenv, len);
-        JCALL4(SetByteArrayRegion, jenv, $result, 0, len, (const euc_byte_t *)$1);
+        JCALL4(SetByteArrayRegion, jenv, $result, 0, len, (const kakasi_byte_t *)$1);
         free((void*)$1);
     } 
 }
-%typemap(javadirectorin) euc_byte_t * "$jniinput"
-%typemap(javadirectorout) euc_byte_t * "$javacall"
+%typemap(javadirectorin) kakasi_byte_t * "$jniinput"
+%typemap(javadirectorout) kakasi_byte_t * "$javacall"
 
-%typemap(jni) euc_byte_t * "jbyteArray"
-%typemap(jtype) euc_byte_t * "byte[]"
-%typemap(jstype) euc_byte_t * "byte[]"
-%typemap(javain) euc_byte_t * "$javainput"
-%typemap(javaout) euc_byte_t * {
+%typemap(jni) kakasi_byte_t * "jbyteArray"
+%typemap(jtype) kakasi_byte_t * "byte[]"
+%typemap(jstype) kakasi_byte_t * "byte[]"
+%typemap(javain) kakasi_byte_t * "$javainput"
+%typemap(javaout) kakasi_byte_t * {
     return $jnicall;
   }
 
@@ -137,7 +137,7 @@ int kakasi_getopt_argv(void *handle, int argc, char **argv) {
     return portable_kakasi_getopt_argv(handle, argc, argv);
 }
 
-euc_byte_t *kakasi_do(void *handle, euc_byte_t *str) {
+kakasi_byte_t *kakasi_do(void *handle, kakasi_byte_t *str) {
    return portable_kakasi_do(handle, str);
 }
 

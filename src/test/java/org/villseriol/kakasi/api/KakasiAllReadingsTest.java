@@ -12,7 +12,7 @@ public class KakasiAllReadingsTest {
 
     @BeforeEach
     public void setUp() {
-        kakasi.configure(KakasiConstants.ASCII_CONFIG_ALL_READINGS);
+        kakasi.configure(KakasiConstants.ASCII_ALL_READINGS_CONFIG);
     }
 
 
