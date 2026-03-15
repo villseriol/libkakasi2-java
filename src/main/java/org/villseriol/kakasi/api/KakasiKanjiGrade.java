@@ -7,7 +7,7 @@ package org.villseriol.kakasi.api;
  */
 public enum KakasiKanjiGrade {
     /**
-     * Grade 0 (pre-school / very basic kanji set).
+     * Grade 0 (no grade).
      */
     ZERO("0"),
     /**
@@ -55,7 +55,7 @@ public enum KakasiKanjiGrade {
      */
     N("n"),
     /**
-     * All kanji (equivalent to the lowest grade threshold).
+     * All kanji (equivalent to the no grade threshold).
      */
     ALL("0");
 
