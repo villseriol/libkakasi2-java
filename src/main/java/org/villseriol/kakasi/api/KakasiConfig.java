@@ -27,8 +27,8 @@ public class KakasiConfig {
     private String separator;
     private KakasiRomaji romaji = KakasiRomaji.HEPBURN;
     private Collection<Character> skipCharacters;
-    private KakasiHiraganaGrade hiraganaGrade;
-    private KakasiFuriganaGrade furiganaGrade;
+    private KakasiKanjiGrade hiraganaGrade;
+    private KakasiKanjiGrade furiganaGrade;
 
     public KakasiConfig() {
         super();
@@ -62,24 +62,23 @@ public class KakasiConfig {
     }
 
 
-    public KakasiFuriganaGrade getFuriganaGrade() {
+    public KakasiKanjiGrade getFuriganaGrade() {
         return furiganaGrade;
     }
 
 
     /**
      * All kanji above the provided grade (non-inclusive) will have attached
-     * furigana (if kanji-hiragana is enabled). Overridden by hiragana grade
-     * except when furigana grade is <code>KakasiFuriganaGrade.ALL</code>.
+     * furigana (if kanji-hiragana is enabled). Overridden by hiragana grade.
      *
      * @param furiganaGrade the grade
      */
-    public void setFuriganaGrade(KakasiFuriganaGrade furiganaGrade) {
+    public void setFuriganaGrade(KakasiKanjiGrade furiganaGrade) {
         this.furiganaGrade = furiganaGrade;
     }
 
 
-    public KakasiHiraganaGrade getHiraganaGrade() {
+    public KakasiKanjiGrade getHiraganaGrade() {
         return hiraganaGrade;
     }
 
@@ -87,12 +86,11 @@ public class KakasiConfig {
     /**
      * All kanji above the provided grade (non-inclusive) will be translated to
      * hiragana (if kanji-hiragana is enabled). Takes precedence over furigana
-     * grade except when furigana grade is set to
-     * <code>KakasiFuriganaGrade.ALL</code>.
+     * grade.
      *
      * @param hiraganaGrade the grade
      */
-    public void setHiraganaGrade(KakasiHiraganaGrade hiraganaGrade) {
+    public void setHiraganaGrade(KakasiKanjiGrade hiraganaGrade) {
         this.hiraganaGrade = hiraganaGrade;
     }
 
@@ -216,11 +214,7 @@ public class KakasiConfig {
         }
 
         if (furiganaGrade != null) {
-            if (KakasiFuriganaGrade.ALL.equals(furiganaGrade)) {
-                arguments.add("-f");
-            } else {
-                arguments.add(String.format("-L%s", furiganaGrade.getCode()));
-            }
+            arguments.add(String.format("-L%s", furiganaGrade.getCode()));
         }
 
         if (showAllReadings) {

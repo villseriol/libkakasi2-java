@@ -41,7 +41,7 @@ public final class KakasiConstants {
     public static final KakasiConfig FURIGANA_CONFIG = new KakasiConfig() {
         {
             setSeparator(" ");
-            setFuriganaGrade(KakasiFuriganaGrade.ALL);
+            setFuriganaGrade(KakasiKanjiGrade.ALL);
 
             setTranslations(new HashSet<>() {
                 {

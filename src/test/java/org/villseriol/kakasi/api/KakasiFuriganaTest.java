@@ -3,12 +3,15 @@ package org.villseriol.kakasi.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 public class KakasiFuriganaTest {
-    private Kakasi kakasi = new Kakasi();
+    private Map<KakasiKanjiGrade, Kakasi> instances = new HashMap<>();
 
     @BeforeEach
     public void setUp() {
@@ -16,17 +19,38 @@ public class KakasiFuriganaTest {
         config.setFuriganaLeft("{");
         config.setFuriganaRight("}");
 
-        kakasi.configure(config);
+        for (KakasiKanjiGrade grade : KakasiKanjiGrade.values()) {
+            config.setFuriganaGrade(grade);
 
-        String first = kakasi.run("にほんご");
-        assertEquals("にほんご", first);
+            Kakasi kakasi = new Kakasi();
+            kakasi.configure(config);
+
+            // warm up the instance
+            String first = kakasi.run("にほんご");
+            assertEquals("にほんご", first);
+
+            instances.putIfAbsent(grade, kakasi);
+        }
     }
 
 
     @Test
     public void testFurigana() {
-        assertEquals("日本{にっぽん}", kakasi.run("日本"));
-        assertEquals("山{やま}", kakasi.run("山"));
-        assertEquals("派{は}", kakasi.run("派"));
+        Kakasi kakasiAll = instances.get(KakasiKanjiGrade.ALL);
+        assertEquals("日本{にっぽん}", kakasiAll.run("日本"));
+        assertEquals("山{やま}", kakasiAll.run("山"));
+        assertEquals("派{は}", kakasiAll.run("派"));
+
+        // touches all kanji above level 5
+        Kakasi levelFive = instances.get(KakasiKanjiGrade.FIVE);
+        assertEquals("姿{すがた}", levelFive.run("姿"));
+
+        // touches all kanji above level 6 (non-inclusive)
+        Kakasi levelSix = instances.get(KakasiKanjiGrade.SIX);
+        assertEquals("姿", levelSix.run("姿"));
+
+        // touches all kanji above level 6
+        Kakasi levelSeven = instances.get(KakasiKanjiGrade.SEVEN);
+        assertEquals("姿", levelSeven.run("姿"));
     }
 }
