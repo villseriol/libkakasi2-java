@@ -63,10 +63,17 @@
           <exclude>**/*.c</exclude>
         </excludes>
       </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>copying.txt</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
     </resources>
     <plugins>
       <!-- Debian Publishing JAR -->
-      <plugin>
+      <!-- <plugin>
         <groupId>org.vafer</groupId>
         <artifactId>jdeb</artifactId>
         <version>1.14</version>
@@ -94,7 +101,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
