@@ -263,5 +263,26 @@
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_angle_bracket_in_type_arguments" value="do not insert"/>
 <setting id="org.eclipse.jdt.core.formatter.never_indent_block_comments_on_first_column" value="false"/>
 <setting id="org.eclipse.jdt.core.formatter.keep_then_statement_on_same_line" value="false"/>
+
+<!-- Wrap annotations on types -->
+<setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_type" value="16"/>
+
+<!-- Wrap annotations on fields -->
+<setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_field" value="16"/>
+
+<!-- Wrap annotations on methods -->
+<setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_method" value="16"/>
+
+<!-- Wrap annotations on parameters -->
+<setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_parameter" value="16"/>
+
+<!-- Wrap annotations on local variables -->
+<setting id="org.eclipse.jdt.core.formatter.alignment_for_annotations_on_local_variable" value="16"/>
+
+<!-- Wrap annotation arguments -->
+<setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_annotation" value="16"/>
+
+<!-- Wrap annotation array values -->
+<setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_array_initializer" value="16"/>
 </profile>
 </profiles>
