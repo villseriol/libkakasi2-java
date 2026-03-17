@@ -1,9 +1,0 @@
-Package: libkakasi2-java
-Section: utils
-Version: 2.0.1
-Architecture: all
-Maintainer: Villseriol <villseriol@pm.me>
-Depends: default-jre-headless | java11-runtime-headless, ${misc:Depends}
-Priority: optional
-Homepage: https://wiki.openstreetmap.org/wiki/Osmosis
-Description: The kakasi C library ported to Java.
