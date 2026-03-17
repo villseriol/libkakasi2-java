@@ -16,7 +16,7 @@
     <developer>
       <id>EY4180</id>
       <name>EY4180</name>
-      <email>ey4180@pm.me</email>
+      <email>ey4180@villseriol.org</email>
     </developer>
   </developers>
   <inceptionYear>2026</inceptionYear>
@@ -45,6 +45,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
+    <!-- Source: https://mvnrepository.com/artifact/info.picocli/picocli -->
+    <dependency>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
+      <version>4.7.7</version>
+      <scope>compile</scope>
+    </dependency>
     <!-- Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -66,7 +73,7 @@
     </resources>
     <plugins>
       <!-- Debian Publishing JAR -->
-      <!-- <plugin>
+      <plugin>
         <groupId>org.vafer</groupId>
         <artifactId>jdeb</artifactId>
         <version>1.14</version>
@@ -80,7 +87,7 @@
             <configuration>
               <verbose>true</verbose>
               <snapshotEnv>USER</snapshotEnv>
-              <controlDir>${basedir}/src/deb/control</controlDir>
+              <controlDir>${basedir}/debian</controlDir>
               <dataSet>
                 <data>
                   <src>${project.build.directory}/${project.build.finalName}.jar</src>
@@ -94,7 +101,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin> -->
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -113,6 +120,20 @@
         <version>3.2.5</version>
         <configuration>
           <argLine>-Dfile.encoding=UTF-8</argLine>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
 
