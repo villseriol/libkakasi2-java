@@ -20,6 +20,8 @@ public class KakasiConfig {
     private Collection<KakasiTranslation> translations;
     private Collection<String> dictionaries;
     private boolean wakatigaki;
+    private boolean capitalise;
+    private boolean uppercase;
     private boolean yomi;
     private String furiganaLeft;
     private String furiganaRight;
@@ -59,6 +61,28 @@ public class KakasiConfig {
         this.furiganaRight = other.furiganaRight;
         this.furiganaGrade = other.furiganaGrade;
         this.hiraganaGrade = other.hiraganaGrade;
+        this.capitalise = other.capitalise;
+        this.uppercase = other.uppercase;
+    }
+
+
+    public void setUppercase(boolean uppercase) {
+        this.uppercase = uppercase;
+    }
+
+
+    public boolean isUppercase() {
+        return uppercase;
+    }
+
+
+    public void setCapitalise(boolean capitalise) {
+        this.capitalise = capitalise;
+    }
+
+
+    public boolean isCapitalise() {
+        return capitalise;
     }
 
 
@@ -205,6 +229,10 @@ public class KakasiConfig {
             arguments.add(String.format("-S%s", separator));
         }
 
+        if (uppercase) {
+            arguments.add("-U");
+        }
+
         if (yomi) {
             arguments.add("-y");
         }
@@ -223,6 +251,10 @@ public class KakasiConfig {
 
         if (romaji != null) {
             arguments.add(String.format("-r%s", romaji.getCode()));
+        }
+
+        if (capitalise) {
+            arguments.add("-C");
         }
 
         if (skipCharacters != null) {

@@ -1,6 +1,10 @@
 // This software is released into the Public Domain.  See copying.txt for details.
 package org.villseriol.kakasi.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public enum KakasiCharsetCategory {
     /**
      * Known as "ascii" character set.
@@ -45,5 +49,14 @@ public enum KakasiCharsetCategory {
 
     public String getCode() {
         return code;
+    }
+
+
+    public static String[] codes() {
+        List<String> result = new ArrayList<>();
+        for (KakasiCharsetCategory v : KakasiCharsetCategory.values()) {
+            result.add(v.getCode());
+        }
+        return result.toArray(String[]::new);
     }
 }

@@ -1,9 +1,0 @@
-Package: libkakasi2-java
-Section: utils
-Version: 1.0.0
-Architecture: all
-Maintainer: Villseriol <villseriol@pm.me>
-Depends: default-jre-headless | java11-runtime-headless, libkakasi2, ${misc:Depends}
-Priority: optional
-Homepage: https://wiki.openstreetmap.org/wiki/Osmosis
-Description: No Description

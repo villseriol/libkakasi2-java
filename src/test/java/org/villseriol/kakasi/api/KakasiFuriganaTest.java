@@ -36,7 +36,7 @@ public class KakasiFuriganaTest {
 
     @Test
     public void testFurigana() {
-        Kakasi kakasiAll = instances.get(KakasiKanjiGrade.ALL);
+        Kakasi kakasiAll = instances.get(KakasiKanjiGrade.ZERO);
         assertEquals("日本{にっぽん}", kakasiAll.run("日本"));
         assertEquals("山{やま}", kakasiAll.run("山"));
         assertEquals("派{は}", kakasiAll.run("派"));

@@ -1,6 +1,10 @@
 // This software is released into the Public Domain.  See copying.txt for details.
 package org.villseriol.kakasi.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  * Used to configure the minimum kanji grade for kanji-hiragana translations.
  * Split into three main categories: 小学校1年生～6年生, 常用漢字(中学校卒業程度), 人名用漢字
@@ -53,11 +57,7 @@ public enum KakasiKanjiGrade {
     /**
      * Non-standard or additional kanji not included in the standard grade sets.
      */
-    N("n"),
-    /**
-     * All kanji (equivalent to the no grade threshold).
-     */
-    ALL("0");
+    N("n");
 
     private final String code;
 
@@ -68,6 +68,15 @@ public enum KakasiKanjiGrade {
 
     public String getCode() {
         return code;
+    }
+
+
+    public static String[] codes() {
+        List<String> result = new ArrayList<>();
+        for (KakasiKanjiGrade v : KakasiKanjiGrade.values()) {
+            result.add(v.getCode());
+        }
+        return result.toArray(String[]::new);
     }
 
 }

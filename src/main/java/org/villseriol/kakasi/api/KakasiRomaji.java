@@ -1,6 +1,10 @@
 // This software is released into the Public Domain.  See copying.txt for details.
 package org.villseriol.kakasi.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  * A romaji enum used for configuring the romanization method.
  */
@@ -23,5 +27,14 @@ public enum KakasiRomaji {
 
     public String getCode() {
         return code;
+    }
+
+
+    public static String[] codes() {
+        List<String> result = new ArrayList<>();
+        for (KakasiRomaji v : KakasiRomaji.values()) {
+            result.add(v.getCode());
+        }
+        return result.toArray(String[]::new);
     }
 }
