@@ -7,32 +7,32 @@ import org.villseriol.kakasi.api.Kakasi;
 import org.villseriol.kakasi.api.KakasiConfig;
 import org.villseriol.kakasi.api.KakasiKanjiGrade;
 import org.villseriol.kakasi.api.KakasiRomaji;
+import org.villseriol.kakasi.cli.converters.KakasiKanjiGradeConverter;
+import org.villseriol.kakasi.cli.groups.KakasiCharsetGroup;
+import org.villseriol.kakasi.cli.groups.KakasiFlagGroup;
+import org.villseriol.kakasi.cli.groups.KakasiSeparatorGroup;
 
 import picocli.CommandLine;
+import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Help.Visibility;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 
-@Command(name = "kakasi", mixinStandardHelpOptions = true, versionProvider = KakasiVersionProvider.class,
+@Command(name = "kakasi-java", mixinStandardHelpOptions = true, versionProvider = KakasiVersionProvider.class,
         header = "KAKASI - Kanji Kana Simple Inverter (Java)")
 public class KakasiCommand implements Callable<String> {
-    private Boolean separator;
-    private String customSeparatorValue;
+    private KakasiSeparatorGroup separatorGroup;
+    private KakasiFlagGroup flagGroup;
+    private KakasiCharsetGroup charsetGroup;
 
     private KakasiRomaji romaji;
     private String input;
     private KakasiKanjiGrade furiganaGrade;
     private KakasiKanjiGrade hiraganaGrade;
-    private Boolean showAllReadings;
 
-    @Option(names = { "-p" }, description = "list all readings", type = Boolean.class, defaultValue = "false")
-    public void setShowAllReadings(Boolean showAllReadings) {
-        this.showAllReadings = showAllReadings;
-    }
-
-
-    @Option(names = { "-L" }, description = "minimum furigana kanji grade ${COMPLETION-CANDIDATES}",
+    @Option(names = { "-L" }, description = "minimum furigana kanji grade (${COMPLETION-CANDIDATES})",
             converter = KakasiKanjiGradeConverter.class, completionCandidates = KakasiKanjiGradeCandidates.class,
             paramLabel = "<grade>")
     public void setFuriganaGrade(KakasiKanjiGrade furiganaGrade) {
@@ -40,7 +40,7 @@ public class KakasiCommand implements Callable<String> {
     }
 
 
-    @Option(names = { "-l" }, description = "minimum hiragana kanji grade ${COMPLETION-CANDIDATES}",
+    @Option(names = { "-l" }, description = "minimum hiragana kanji grade (${COMPLETION-CANDIDATES})",
             converter = KakasiKanjiGradeConverter.class, completionCandidates = KakasiKanjiGradeCandidates.class,
             paramLabel = "<grade>")
     public void setHiraganaGrade(KakasiKanjiGrade hiraganaGrade) {
@@ -48,22 +48,29 @@ public class KakasiCommand implements Callable<String> {
     }
 
 
-    @Option(names = { "-r" }, description = "romaji conversion system ${COMPLETION-CANDIDATES}",
-            converter = KakasiRomajiConverter.class, completionCandidates = KakasiRomajiCandidates.class)
+    @Option(names = { "-r" }, description = "romaji conversion system (${COMPLETION-CANDIDATES})",
+            converter = KakasiRomajiConverter.class, completionCandidates = KakasiRomajiCandidates.class,
+            defaultValue = "hepburn", showDefaultValue = Visibility.ALWAYS)
     public void setRomaji(KakasiRomaji romaji) {
         this.romaji = romaji;
     }
 
 
-    @Option(names = { "-S" }, description = "set separator", paramLabel = "<separator>")
-    public void setCustomSeparatorValue(String customSeparatorValue) {
-        this.customSeparatorValue = customSeparatorValue;
+    @ArgGroup(heading = "flags:%n")
+    public void setFlagGroup(KakasiFlagGroup flagGroup) {
+        this.flagGroup = flagGroup;
     }
 
 
-    @Option(names = { "-s" }, description = "enable separator", type = Boolean.class)
-    public void setSeparator(Boolean separator) {
-        this.separator = separator;
+    @ArgGroup(heading = "separator:%n", exclusive = true)
+    public void setSeparatorGroup(KakasiSeparatorGroup separatorGroup) {
+        this.separatorGroup = separatorGroup;
+    }
+
+
+    @ArgGroup(heading = "Character Sets:%n")
+    public void setCharsetGroup(KakasiCharsetGroup charsetGroup) {
+        this.charsetGroup = charsetGroup;
     }
 
 
@@ -76,18 +83,14 @@ public class KakasiCommand implements Callable<String> {
     @Override
     public String call() throws Exception {
         KakasiConfig config = new KakasiConfig();
-        if (separator) {
-            config.setSeparator(" ");
-
-            if (customSeparatorValue != null && !"".equals(customSeparatorValue)) {
-                config.setSeparator(customSeparatorValue);
-            }
-        }
 
         config.setRomaji(romaji);
         config.setFuriganaGrade(furiganaGrade);
         config.setHiraganaGrade(hiraganaGrade);
-        config.setShowAllReadings(showAllReadings);
+
+        separatorGroup.visit(config);
+        flagGroup.visit(config);
+        charsetGroup.visit(config);
 
         try (Kakasi instance = new Kakasi(config)) {
             return instance.run(input);

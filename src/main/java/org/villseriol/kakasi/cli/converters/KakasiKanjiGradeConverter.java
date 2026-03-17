@@ -1,5 +1,5 @@
 // This software is released into the Public Domain.  See copying.txt for details.
-package org.villseriol.kakasi.cli;
+package org.villseriol.kakasi.cli.converters;
 
 import org.villseriol.kakasi.api.KakasiKanjiGrade;
 

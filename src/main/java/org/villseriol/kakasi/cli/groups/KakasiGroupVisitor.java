@@ -1,0 +1,9 @@
+// This software is released into the Public Domain.  See copying.txt for details.
+package org.villseriol.kakasi.cli.groups;
+
+import org.villseriol.kakasi.api.KakasiConfig;
+
+
+public interface KakasiGroupVisitor {
+    void visit(KakasiConfig config);
+}
