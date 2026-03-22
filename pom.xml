@@ -20,7 +20,7 @@
     </developer>
   </developers>
   <inceptionYear>2026</inceptionYear>
-  <url>https://github.com/villseriol/libkakasi2-java</url>
+  <url>https://libkakasi2-java.villseriol.org</url>
   <scm>
     <connection>scm:git:git://github.com/villseriol/libkakasi2-java.git</connection>
     <developerConnection>scm:git:ssh://github.com/villseriol/libkakasi2-java.git</developerConnection>
