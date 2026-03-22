@@ -4,8 +4,9 @@ jobs:
   package-artifacts:
     uses: ./.github/workflows/package-artifacts.yml
 
-  publish:
+  publish-snapshot:
     runs-on: ubuntu-latest
+    needs: package-artifacts
     environment: staging
     steps:
       - uses: actions/download-artifact@v8
