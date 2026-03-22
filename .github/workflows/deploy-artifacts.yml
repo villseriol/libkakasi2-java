@@ -16,6 +16,11 @@ jobs:
           distribution: temurin
           java-version: "11"
           cache: maven
+          server-id: central
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_PASSWORD
+          gpg-private-key: ${{secrets.GPG_PRIVATE_KEY}}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Enforce Snapshot Versioning
         id: set-version
         run: |
@@ -26,6 +31,10 @@ jobs:
 
           mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
       - name: Deploy
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{secrets.MAVEN_CENTRAL_USERNAME}}
+          MAVEN_CENTRAL_PASSWORD: ${{secrets.MAVEN_CENTRAL_PASSWORD}}
+          MAVEN_GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
         run: mvn clean deploy
 
   deploy-artifacts:
@@ -43,5 +52,14 @@ jobs:
           distribution: temurin
           java-version: "11"
           cache: maven
+          server-id: central
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_PASSWORD
+          gpg-private-key: ${{secrets.GPG_PRIVATE_KEY}}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Deploy
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{secrets.MAVEN_CENTRAL_USERNAME}}
+          MAVEN_CENTRAL_PASSWORD: ${{secrets.MAVEN_CENTRAL_PASSWORD}}
+          MAVEN_GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
         run: mvn clean deploy
