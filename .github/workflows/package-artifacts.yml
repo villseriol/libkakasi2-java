@@ -36,7 +36,6 @@ jobs:
 
           VERSION="${BASE_VERSION}-SNAPSHOT"
 
-          echo "Using version: $VERSION"
           mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
       - name: Package
         run: mvn clean package

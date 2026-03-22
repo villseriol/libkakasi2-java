@@ -1,0 +1,47 @@
+name: Deploy Artifacts
+on: [workflow_dispatch]
+jobs:
+  deploy-snapshot-artifacts:
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/master'
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "11"
+          cache: maven
+      - name: Enforce Snapshot Versioning
+        id: set-version
+        run: |
+          BASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          BASE_VERSION=${BASE_VERSION%-SNAPSHOT}
+
+          VERSION="${BASE_VERSION}-SNAPSHOT"
+
+          mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
+      - name: Package
+        run: mvn clean deploy
+
+  deploy-artifacts:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "11"
+          cache: maven
+      - name: Deploy
+        run: mvn clean deploy
