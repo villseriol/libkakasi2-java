@@ -31,7 +31,7 @@ jobs:
           mvn gpg:sign-and-deploy-file \
             -DrepositoryId=maven \
             -Durl=${{ vars.MAVEN_REPOSITORY_URL }} \
-            -Dfile=target/${{ job.package-artifacts.outputs.final_name }}.jar \
-            -Dsources=target/${{ job.package-artifacts.outputs.final_name }}-sources.jar \
-            -Djavadoc=target/${{ job.package-artifacts.outputs.final_name }}-javadoc.jar \
+            -Dfile=target/${{ needs.package-artifacts.outputs.final_name }}.jar \
+            -Dsources=target/${{ needs.package-artifacts.outputs.final_name }}-sources.jar \
+            -Djavadoc=target/${{ needs.package-artifacts.outputs.final_name }}-javadoc.jar \
             -DpomFile=pom.xml
