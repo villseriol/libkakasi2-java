@@ -3,6 +3,8 @@ on: [workflow_dispatch]
 jobs:
   package-artifacts:
     runs-on: ubuntu-latest
+    outputs:
+      final_name: ${{ steps.get-final-name.outputs.final_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -14,6 +16,17 @@ jobs:
           distribution: temurin
           java-version: "11"
           cache: maven
+      - name: Set version based on environment
+        environment: staging
+        id: set-version
+        run: |
+          BASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          BASE_VERSION=${BASE_VERSION%-SNAPSHOT}
+
+          VERSION="${BASE_VERSION}-SNAPSHOT"
+
+          echo "Using version: $VERSION"
+          mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
       - name: Package
         run: mvn clean package
       - name: Get Final Artifact Names
