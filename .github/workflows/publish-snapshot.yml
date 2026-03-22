@@ -3,4 +3,5 @@ on: [workflow_dispatch]
 jobs:
   package-artifacts:
     uses: ./.github/workflows/package-artifacts.yml
-    environment: staging
+    environment:
+      name: staging
