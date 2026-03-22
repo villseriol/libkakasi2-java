@@ -23,7 +23,11 @@ jobs:
           BASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           BASE_VERSION=${BASE_VERSION%-SNAPSHOT}
 
-          VERSION="${BASE_VERSION}-SNAPSHOT"
+          if [[ "${{ job.environment }}" == "staging" ]]; then
+            VERSION="${BASE_VERSION}-SNAPSHOT"
+          else
+            VERSION="${BASE_VERSION}"
+          fi
 
           echo "Using version: $VERSION"
           mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
