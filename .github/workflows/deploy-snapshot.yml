@@ -1,4 +1,4 @@
-name: Deploy Artifacts
+name: Deploy Snapshot Artifacts
 on: [workflow_dispatch]
 jobs:
   deploy-artifacts:
