@@ -16,20 +16,6 @@ jobs:
           distribution: temurin
           java-version: "11"
           cache: maven
-      - name: Set version based on environment
-        id: set-version
-        run: |
-          BASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          BASE_VERSION=${BASE_VERSION%-SNAPSHOT}
-
-          if [[ "${{ job.environment }}" == "staging" ]]; then
-            VERSION="${BASE_VERSION}-SNAPSHOT"
-          else
-            VERSION="${BASE_VERSION}"
-          fi
-
-          echo "Using version: $VERSION"
-          mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
       - name: Package
         run: mvn clean package
       - name: Get Final Artifact Names

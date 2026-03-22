@@ -20,8 +20,6 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: kakasi2-artifacts
-      - name: List Artifacts
-        run: ls -R artifacts
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
