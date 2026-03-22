@@ -17,7 +17,6 @@ jobs:
           java-version: "11"
           cache: maven
       - name: Set version based on environment
-        environment: staging
         id: set-version
         run: |
           BASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
