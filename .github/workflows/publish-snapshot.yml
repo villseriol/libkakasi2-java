@@ -1,0 +1,47 @@
+name: Publish
+on: [workflow_dispatch]
+jobs:
+  package-artifacts:
+    uses: ./.github/workflows/package-artifacts.yml
+
+  approval:
+    runs-on: ubuntu-latest
+    needs: package-artifacts
+    environment:
+      name: staging
+    steps:
+      - name: Await approval
+        run: echo "Waiting for approval to deploy..."
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: approval
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: kakasi2-artifacts
+      - name: List Artifacts
+        run: ls -R artifacts
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: "11"
+          server-id: central
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_PASSWORD
+          gpg-private-key: ${{secrets.GPG_PRIVATE_KEY}}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Deploy to Maven Central
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{secrets.MAVEN_CENTRAL_USERNAME}}
+          MAVEN_CENTRAL_PASSWORD: ${{secrets.MAVEN_CENTRAL_PASSWORD}}
+          MAVEN_GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+        run: |
+          mvn gpg:sign-and-deploy-file \
+            -DrepositoryId=maven \
+            -Durl=https://central.sonatype.com/repository/maven-snapshots/ \
+            -Dfile=target/${{ needs.package-artifacts.outputs.final_name }}.jar \
+            -Dsources=target/${{ needs.package-artifacts.outputs.final_name }}-sources.jar \
+            -Djavadoc=target/${{ needs.package-artifacts.outputs.final_name }}-javadoc.jar \
+            -DpomFile=pom.xml
