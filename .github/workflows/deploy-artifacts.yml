@@ -25,7 +25,7 @@ jobs:
           VERSION="${BASE_VERSION}-SNAPSHOT"
 
           mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
-      - name: Package
+      - name: Deploy
         run: mvn clean deploy
 
   deploy-artifacts:
