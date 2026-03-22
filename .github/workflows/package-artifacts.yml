@@ -1,5 +1,5 @@
 name: Package Artifacts
-on: [workflow_dispatch]
+on: [workflow_dispatch, workflow_call]
 jobs:
   package-snapshot-artifacts:
     runs-on: ubuntu-latest
