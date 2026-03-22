@@ -20,7 +20,7 @@
     </developer>
   </developers>
   <inceptionYear>2026</inceptionYear>
-  <url>https://github.com/villseriol/libkakasi2-java</url>
+  <url>https://libkakasi2-java.villseriol.org</url>
   <scm>
     <connection>scm:git:git://github.com/villseriol/libkakasi2-java.git</connection>
     <developerConnection>scm:git:ssh://github.com/villseriol/libkakasi2-java.git</developerConnection>
@@ -36,7 +36,7 @@
   <distributionManagement>
     <repository>
       <id>central</id>
-      <url>https://central.sonatype.com/api/v1/publisher</url>
+      <url>https://central.sonatype.com/api/v1/publisher/upload</url>
     </repository>
   </distributionManagement>
   <properties>
@@ -156,6 +156,34 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <!-- GPG Signing -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.2.8</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Central Publishing Plugin -->
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.10.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+          <autoPublish>true</autoPublish>
+        </configuration>
       </plugin>
     </plugins>
   </build>
