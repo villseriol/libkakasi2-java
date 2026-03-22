@@ -1,5 +1,15 @@
 name: Package Artifacts
-on: [workflow_dispatch, workflow_call]
+on:
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      snapshot_name:
+        description: "The snapshot name"
+        value: ${{ jobs.package-snapshot-artifacts.outputs.final_name }}
+      release_name:
+        description: "The release name"
+        value: ${{ jobs.package-snapshot-artifacts.outputs.final_name }}
+
 jobs:
   package-snapshot-artifacts:
     runs-on: ubuntu-latest
