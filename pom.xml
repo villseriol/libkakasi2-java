@@ -68,11 +68,13 @@
         </excludes>
       </resource>
       <resource>
-        <directory>src/main/resources</directory>
+        <directory>${project.basedir}</directory>
+        <targetPath>META-INF</targetPath>
         <includes>
-          <include>copying.txt</include>
+          <include>LICENSE</include>
+          <include>THIRD_PARTY_NOTICES</include>
         </includes>
-        <filtering>true</filtering>
+        <filtering>false</filtering>
       </resource>
     </resources>
     <plugins>
