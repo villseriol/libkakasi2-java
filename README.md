@@ -62,6 +62,16 @@ Is equivalent to,
 > 山{ヤマ}
 ```
 
+## Compliance
+
+To the best of my knowledge, this project is in compliance with the the following licensing
+restrictions,
+
+| Entity        | Reviewed On | Use      | Notes                                                  |
+| ------------- | ----------- | -------- | ------------------------------------------------------ |
+| kakasi-2.3.6  | 29/04/2026  | Embedded | ✅ GPL 2.0 licence is compatible with GPL 3.0          |
+| libiconv-1.19 | 29/04/2026  | Embedded | ✅ LGPL licence poses no restrictions in this use case |
+
 ## Disclaimer
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU
