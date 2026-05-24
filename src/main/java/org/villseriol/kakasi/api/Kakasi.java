@@ -98,18 +98,18 @@ public class Kakasi implements Closeable {
      * @param input the string
      * @return the converted string
      */
-    public String run(final String input) {
+    public String run(final CharSequence input) {
         if (state.isClosed()) {
             throw new KakasiRuntimeException("Kakasi instance has already been closed.");
         }
 
         // Worse case scenario buffer for input + null termination byte
-        byte[] bufferIn = new byte[(input.length() + 1) * MAX_BYTES_PER_CHARACTER];
-        encodeToEucJpFromUtf(input, bufferIn);
+        ByteBuffer bb = ByteBuffer.allocateDirect((input.length() + 1) * MAX_BYTES_PER_CHARACTER);
+        encodeToEucJpFromUtf(input, bb);
 
         SWIGTYPE_p_void handle = this.state.getHandle();
 
-        byte[] encodedOut = kakasi.kakasi_do(handle, bufferIn);
+        byte[] encodedOut = kakasi.kakasi_do_nio(handle, bb);
 
         return new String(encodedOut);
     }
@@ -121,20 +121,19 @@ public class Kakasi implements Closeable {
      * @param input the string
      * @param buffer the buffer
      */
-    public static void encodeToEucJpFromUtf(String input, byte[] buffer) {
+    private static void encodeToEucJpFromUtf(CharSequence input, ByteBuffer buffer) {
         CharsetEncoder encoder = ENCODER.get();
         encoder.reset();
 
-        ByteBuffer outBuffer = ByteBuffer.wrap(buffer);
         CharBuffer inBuffer = CharBuffer.wrap(input);
 
-        CoderResult result = encoder.encode(inBuffer, outBuffer, true);
+        CoderResult result = encoder.encode(inBuffer, buffer, true);
 
         if (result.isError()) {
             throw new KakasiRuntimeException("Kakasi failed to encode input.");
         }
 
-        encoder.flush(outBuffer);
+        encoder.flush(buffer);
     }
 
 

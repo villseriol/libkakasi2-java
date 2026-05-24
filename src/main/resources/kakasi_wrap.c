@@ -295,6 +295,10 @@ kakasi_byte_t *kakasi_do(void *handle, kakasi_byte_t *str) {
    return portable_kakasi_do(handle, str);
 }
 
+kakasi_byte_t *kakasi_do_nio(void *handle, kakasi_byte_t *buffer) {
+   return portable_kakasi_do(handle, buffer);
+}
+
 int kakasi_close(void *handle) {
     return portable_kakasi_close(handle);
 }
@@ -418,6 +422,33 @@ SWIGEXPORT jbyteArray JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1d
     free((void*)result);
   }
   if (arg2) (*jenv)->ReleaseByteArrayElements(jenv, jarg2, (kakasi_byte_t *)arg2, 0);
+  return jresult;
+}
+
+
+SWIGEXPORT jbyteArray JNICALL Java_org_villseriol_kakasi_jni_kakasiJNI_kakasi_1do_1nio(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg2) {
+  jbyteArray jresult = 0 ;
+  void *arg1 = (void *) 0 ;
+  kakasi_byte_t *arg2 = (kakasi_byte_t *) 0 ;
+  kakasi_byte_t *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(void **)&jarg1; 
+  {
+    arg2 = (unsigned char *) (*jenv)->GetDirectBufferAddress(jenv, jarg2); 
+    if (arg2 == NULL) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, "Unable to get address of a java.nio.ByteBuffer direct byte buffer. Buffer must be a direct buffer and not a non-direct buffer.");  
+    }  
+  }
+  result = (kakasi_byte_t *)kakasi_do_nio(arg1,arg2);
+  if (result) {
+    int len = strlen(result);
+    jresult = (*jenv)->NewByteArray(jenv, len);
+    (*jenv)->SetByteArrayRegion(jenv, jresult, 0, len, (const kakasi_byte_t *)result);
+    free((void*)result);
+  }
+  
   return jresult;
 }
 
