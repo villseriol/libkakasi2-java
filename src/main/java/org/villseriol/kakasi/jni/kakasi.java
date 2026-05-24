@@ -30,6 +30,13 @@ public class kakasi {
     return kakasiJNI.kakasi_do(SWIGTYPE_p_void.getCPtr(handle), str);
   }
 
+  public static byte[] kakasi_do_nio(SWIGTYPE_p_void handle, java.nio.ByteBuffer buffer) {
+  assert buffer.isDirect() : "Buffer must be allocated direct.";
+    {
+      return kakasiJNI.kakasi_do_nio(SWIGTYPE_p_void.getCPtr(handle), buffer);
+    }
+  }
+
   public static int kakasi_close(SWIGTYPE_p_void handle) {
     return kakasiJNI.kakasi_close(SWIGTYPE_p_void.getCPtr(handle));
   }

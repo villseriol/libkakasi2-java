@@ -69,6 +69,7 @@
 %}
 
 %include "argv.i"
+%include "nio_buffer.i"
 
 /* kakasi_byte_t * - treat as byte[] */
 %typemap(in, noblock=1) kakasi_byte_t * {
@@ -139,6 +140,10 @@ int kakasi_getopt_argv(void *handle, int argc, char **argv) {
 
 kakasi_byte_t *kakasi_do(void *handle, kakasi_byte_t *str) {
    return portable_kakasi_do(handle, str);
+}
+
+kakasi_byte_t *kakasi_do_nio(void *handle, kakasi_byte_t *buffer) {
+   return portable_kakasi_do(handle, buffer);
 }
 
 int kakasi_close(void *handle) {
